@@ -131,7 +131,6 @@ public class QuanCo : MonoBehaviour
                     {
                         for (int xphay = x + 1; xphay < 9; xphay++)
                         {
-                            Debug.Log(xphay);
                             if (controller.GetComponent<Game>().allTitle[xphay, (int)this.transform.position.y] != null)
                             {
                                 PointMovePlate(xphay, (int)this.transform.position.y);
