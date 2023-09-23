@@ -23,15 +23,21 @@ public class Game : MonoBehaviour
         GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
         for (int i = 0; i < movePlates.Length; i++)
         {
-            Destroy(movePlates[i]); //Be careful with this function "Destroy" it is asynchronous
+            Destroy(movePlates[i]);
         }
     }
     public void DietQuan(int cot,int hang)
     {
         GameObject cp = allTitle[cot, hang];
-        if (cp.GetComponent<QuanCo>().Team == 1) P1.Remove(cp);
+        QuanCo loaiQuan = cp.GetComponent<QuanCo>();
+        if (loaiQuan.Team == 1) P1.Remove(cp);
         else P2.Remove(cp);
         allTitle[cot, hang] = null;
+        if (loaiQuan.TenQuanCo == "vua")
+        {
+            if (loaiQuan.Team == 1) Debug.Log("Player 2 win");
+            else Debug.Log("Player 1 win");
+        }
         Destroy(cp);
     }
     public void NextTurn()

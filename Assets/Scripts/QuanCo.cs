@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QuanCo : MonoBehaviour
 {
-    //public Sprite Goc;
+    //public Sprite Goc,Up;
     public string TenQuanCo;
     public int Team;
     public GameObject controller;
@@ -47,6 +47,22 @@ public class QuanCo : MonoBehaviour
         switch (TenQuanCo)
         {
             case "vua":
+                if(Team==1) for (int y = (int)this.transform.position.y + 1; y < 10; y++)
+                    {
+                        if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y] != null) 
+                        {
+                            if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y].GetComponent<QuanCo>().TenQuanCo == "vua") PointMovePlate((int)this.transform.position.x, y);
+                            break; 
+                        }
+                    }
+                else for (int y = (int)this.transform.position.y - 1; y >= 0; y--)
+                    {
+                        if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y] != null)
+                        {
+                            if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y].GetComponent<QuanCo>().TenQuanCo == "vua") PointMovePlate((int)this.transform.position.x, y);
+                            break;
+                        }
+                    }
                 if ((Team == 1 && this.transform.position.y != 2) || Team == 2)PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
                 if ((Team == 2 && this.transform.position.y != 7) || Team == 1) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y - 1);
                 if(this.transform.position.x != 5) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
