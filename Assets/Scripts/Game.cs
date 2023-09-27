@@ -11,7 +11,7 @@ public class Game : MonoBehaviour
     public List<GameObject> P2 = new List<GameObject>();
     public int PlayingTeam = 1;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         foreach(GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }
         foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }

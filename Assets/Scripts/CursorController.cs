@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class CursorController : MonoBehaviour
@@ -8,7 +7,7 @@ public class CursorController : MonoBehaviour
     public Texture2D mouse0;
     public Texture2D mouse1;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
     }
@@ -20,7 +19,6 @@ public class CursorController : MonoBehaviour
         }
         else
         {
-            Thread.Sleep(100);
             Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
         }
         

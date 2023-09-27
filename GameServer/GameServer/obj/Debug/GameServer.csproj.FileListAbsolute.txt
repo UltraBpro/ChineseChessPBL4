@@ -1,0 +1,7 @@
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\GameServer.exe.config
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\GameServer.exe
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\GameServer.pdb
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.csproj.AssemblyReference.cache
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.csproj.CoreCompileInputs.cache
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.exe
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.pdb
