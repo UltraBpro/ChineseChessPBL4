@@ -6,6 +6,8 @@ MonoImporter:
   defaultReferences:
   - controller: {instanceID: 0}
   - movePlate: {instanceID: 0}
+  - HoverSound: {fileID: 8300000, guid: 828f1c003fc5f7a4fab4657a9e6def08, type: 3}
+  - ClickSound: {fileID: 8300000, guid: 855a53503a72bdf489cf7a03546b59a7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

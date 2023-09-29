@@ -13,7 +13,7 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        foreach(GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }
+        foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }
         foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }
         
     }
@@ -24,6 +24,14 @@ public class Game : MonoBehaviour
         for (int i = 0; i < movePlates.Length; i++)
         {
             Destroy(movePlates[i]);
+        }
+    }
+    public void RemoveMovePlates()
+    {
+        GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
+        for (int i = 0; i < movePlates.Length; i++)
+        {
+            movePlates[i].GetComponent<SpriteRenderer>().enabled = false;
         }
     }
     public void DietQuan(int cot,int hang)

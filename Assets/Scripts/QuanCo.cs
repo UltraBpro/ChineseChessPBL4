@@ -9,14 +9,23 @@ public class QuanCo : MonoBehaviour
     public int Team;
     public GameObject controller;
     public GameObject movePlate;
+    public AudioClip ClickSound;
+    private AudioSource audioSource;
     public void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
         controller = GameObject.FindGameObjectWithTag("GameController");
     }
     public void OnMouseDown()
     {
         if (Team == controller.GetComponent<Game>().PlayingTeam)
         {
+            audioSource.clip = ClickSound;
+            audioSource.Play();
             controller.GetComponent<Game>().DestroyMovePlates();
             CreateMovePlates();
         }

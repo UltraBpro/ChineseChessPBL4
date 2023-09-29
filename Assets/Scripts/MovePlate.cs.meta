@@ -3,7 +3,11 @@ guid: e4127e38c374d1a46a33a85a198c11d2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - controller: {instanceID: 0}
+  - currentMovingObject: {instanceID: 0}
+  - MoveSound: {fileID: 8300000, guid: 7f730966b139fe043bcd8b93feb6ce4b, type: 3}
+  - EatSound: {fileID: 8300000, guid: 2e5b6b6a82162d34dab6d666446d7310, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

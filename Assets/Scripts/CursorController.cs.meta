@@ -3,7 +3,10 @@ guid: df2b1de8c809dc940bb1d500b0314fe5
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - mouse0: {instanceID: 0}
+  - mouse1: {instanceID: 0}
+  - hoverSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -127,3 +127,5 @@ MonoBehaviour:
   attack: 0
   hang: 0
   cot: 0
+  MoveSound: {fileID: 8300000, guid: 7f730966b139fe043bcd8b93feb6ce4b, type: 3}
+  EatSound: {fileID: 8300000, guid: 2e5b6b6a82162d34dab6d666446d7310, type: 3}
