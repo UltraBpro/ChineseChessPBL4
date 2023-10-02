@@ -32,6 +32,8 @@ namespace GameServer
                 if (DSClient[i].ketnoiTCPdenSV == null)
                 {
                     DSClient[i].ketnoiTCPdenSV=clientketnoi;
+                    DSClient[i].KhoiTaoClient();
+                    return;
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace GameServer
         static void Main(string[] args)
         {
             Server.Chay();
-            while(true)if(Console.ReadKey().Key==ConsoleKey.Enter)Console.Clear();
+            while(true)if(Console.ReadKey().Key==ConsoleKey.C)Console.Clear();
         }
     }
 }

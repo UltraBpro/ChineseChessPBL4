@@ -38,12 +38,59 @@ namespace GameServer
                     byte[] data = new byte[dodaidaybyte];
                     Array.Copy(buffer, data, dodaidaybyte);
                     //Xử lý thông tin nhận được
+                    Console.WriteLine(Encoding.UTF8.GetString(data));
+                    ReactToClient(Encoding.UTF8.GetString(data));
                     stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
                 }
             }
             catch (Exception)
             {
                 Console.WriteLine("Đéo đọc được gì, lỗi cmnr");
+            }
+        }
+        public void GuiDenClient(byte[] data)
+        {
+            try
+            {
+                // Bắt đầu hoạt động gửi không đồng bộ
+                stream.BeginWrite(data, 0, data.Length, new AsyncCallback(DaGuiXongRoi), stream);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Có lỗi xảy ra: " + ex.Message);
+            }
+        }
+
+        private void DaGuiXongRoi(IAsyncResult ketqua)
+        {
+            try
+            {
+                stream.EndWrite(ketqua);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Có lỗi xảy ra: " + ex.Message);
+            }
+        }
+        private void ReactToClient(string command)
+        {
+            try
+            {
+                // Tách chuỗi thành các phần thông tin
+                string[] info = command.Split('/');
+
+                // Kiểm tra nếu info1 là "hello"
+                switch (info[0])
+                {
+                    case "Hello":
+                        GuiDenClient(Encoding.UTF8.GetBytes("Chào mày, id của mày là: " + id));
+                        break;
+                }
+                // Thêm các trường hợp xử lý khác tại đây dựa trên giá trị của info1, info2, v.v...
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Có lỗi xảy ra: " + ex.Message);
             }
         }
     }

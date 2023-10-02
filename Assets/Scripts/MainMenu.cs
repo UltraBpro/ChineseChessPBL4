@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,8 +19,12 @@ public class MainMenu : MonoBehaviour
         int portNumber;
         if (!int.TryParse(port, out portNumber))
         {
-            port = "80";
+            port = "1006";
         }
         GameClient.instance.ConnectDenSV(ip, System.Convert.ToInt32(port));
+    }
+    public void SendSTH()
+    {
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameObject.Find("TextBoxChatWithSV").GetComponent<InputField>().text));
     }
 }

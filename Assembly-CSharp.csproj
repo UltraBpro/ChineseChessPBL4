@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\Game.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\QuanCo.cs" />
+    <Compile Include="Assets\Scripts\ThreadManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
