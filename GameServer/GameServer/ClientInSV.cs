@@ -32,7 +32,7 @@ namespace GameServer
             try
             {
                 int dodaidaybyte = stream.EndRead(thongtin);
-                if (dodaidaybyte <= 0) Console.WriteLine("Đéo đọc được mẹ gì");
+                if (dodaidaybyte <= 0) Console.WriteLine("BLANK");
                 else
                 {
                     byte[] data = new byte[dodaidaybyte];
@@ -43,9 +43,9 @@ namespace GameServer
                     stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Đéo đọc được gì, lỗi cmnr");
+                Console.WriteLine("Có lỗi xảy ra khi nhận kết nối: " + ex.Message);
             }
         }
         public void GuiDenClient(byte[] data)
@@ -57,7 +57,7 @@ namespace GameServer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Có lỗi xảy ra: " + ex.Message);
+                Console.WriteLine("Có lỗi xảy ra khi gửi đến client: " + ex.Message);
             }
         }
 
@@ -69,28 +69,21 @@ namespace GameServer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Có lỗi xảy ra: " + ex.Message);
+                Console.WriteLine("Có lỗi xảy ra khi hoàn thành gửi: " + ex.Message);
             }
         }
         private void ReactToClient(string command)
         {
             try
             {
-                // Tách chuỗi thành các phần thông tin
-                string[] info = command.Split('/');
-
-                // Kiểm tra nếu info1 là "hello"
-                switch (info[0])
-                {
-                    case "Hello":
-                        GuiDenClient(Encoding.UTF8.GetBytes("Chào mày, id của mày là: " + id));
-                        break;
-                }
-                // Thêm các trường hợp xử lý khác tại đây dựa trên giá trị của info1, info2, v.v...
+                // Tách chuỗi thành các phần thông tin ""TARGET"|CMD"|"DATA"|...
+                string[] info = command.Split(new char[] { '|' }, 2) ;
+                ClientInSV Target = Server.DSClient[Convert.ToInt32(info[0])];
+                Target.GuiDenClient(Encoding.UTF8.GetBytes(info[1]));
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Có lỗi xảy ra: " + ex.Message);
+                Console.WriteLine("Có lỗi xảy ra phản ứng client: " + ex.Message);
             }
         }
     }

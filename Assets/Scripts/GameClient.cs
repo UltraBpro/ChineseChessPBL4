@@ -50,19 +50,20 @@ public class GameClient : MonoBehaviour
         try
         {
             int dodaidaybyte = stream.EndRead(thongtin);
-            if (dodaidaybyte <= 0) Console.WriteLine("Đéo đọc được mẹ gì");
+            if (dodaidaybyte <= 0) Console.WriteLine("BLANK");
             else
             {
                 byte[] data = new byte[dodaidaybyte];
                 Array.Copy(buffer, data, dodaidaybyte);
                 //Xử lý thông tin nhận được
                 ThreadManager.ExecuteOnMainThread(() => { GameObject.Find("TextFieldFromSV").GetComponent<Text>().text += Encoding.UTF8.GetString(data) + "\n"; });
+                ReactToServer(Encoding.UTF8.GetString(data));
                 stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            Console.WriteLine("Đéo đọc được gì, lỗi cmnr");
+            Debug.Log("Có lỗi xảy ra khi nhận kết nối: " + ex.Message);
         }
     }
     public void GuiDenSV(byte[] data)
@@ -73,7 +74,7 @@ public class GameClient : MonoBehaviour
         }
         catch(Exception e)
         {
-            Debug.Log(e.Message);
+            Debug.Log("Có lỗi xảy ra khi gửi đến server: "+e.Message);
         }
     }
     public void DaGuiXongRoi(IAsyncResult ketquagui)
@@ -84,7 +85,39 @@ public class GameClient : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            Debug.Log("Có lỗi xảy ra khi hoàn thành gửi: " + e.Message);
+        }
+    }
+    private void ReactToServer(string command)
+    {
+        try
+        {
+            // Tách chuỗi thành các phần thông tin
+            string[] info = command.Split('|');
+
+            // Kiểm tra nếu info1 là "hello"
+            switch (info[0])
+            {
+                case "Hello":
+                    idDuocCap = System.Convert.ToInt32(info[1]);
+                    Debug.Log("ID của tôi là: " + idDuocCap);
+                    break;
+                case "Chat":
+
+                    break;
+                case "Move":
+                    //GameObject mp = Instantiate(movePlate, new Vector3(cotMovePl, hangMovePl, 0), Quaternion.identity);
+                    //MovePlate mpScript = mp.GetComponent<MovePlate>();
+                    //if (attack) mpScript.attack = true;
+                    //mpScript.currentMovingObject = gameObject;
+                    //mp.SendMessage("OnMouseDown");
+                    break;
+            }
+            // Thêm các trường hợp xử lý khác tại đây dựa trên giá trị của info1, info2, v.v...
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Có lỗi xảy ra khi phản ứng server: " + ex.Message);
         }
     }
 }

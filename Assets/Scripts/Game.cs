@@ -34,6 +34,23 @@ public class Game : MonoBehaviour
             movePlates[i].GetComponent<SpriteRenderer>().enabled = false;
         }
     }
+    public void DiChuyenQuan(GameObject currentMovingObject, int cot,int hang,bool attack)
+    {
+        if (attack)
+        {
+            DietQuan(cot,hang);
+        }
+        allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y] = null;
+        currentMovingObject.transform.position = new Vector3(cot, hang);
+        //Update the matrix
+        allTitle[cot, hang] = currentMovingObject;
+        if (currentMovingObject.GetComponent<QuanCo>().TenQuanCo == "tot")
+        {
+            QuanCo conTot = currentMovingObject.GetComponent<QuanCo>();
+            if (conTot.Team == 1 && conTot.transform.position.y >= 5) conTot.TenQuanCo = "totsangxong";
+            if (conTot.Team == 2 && conTot.transform.position.y <= 4) conTot.TenQuanCo = "totsangxong";
+        }
+    }
     public void DietQuan(int cot,int hang)
     {
         GameObject cp = allTitle[cot, hang];

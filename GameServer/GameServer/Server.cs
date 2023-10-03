@@ -33,6 +33,7 @@ namespace GameServer
                 {
                     DSClient[i].ketnoiTCPdenSV=clientketnoi;
                     DSClient[i].KhoiTaoClient();
+                    DSClient[i].GuiDenClient(Encoding.UTF8.GetBytes("Hello|" + DSClient[i].id));
                     return;
                 }
             }

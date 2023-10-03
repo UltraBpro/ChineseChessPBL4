@@ -1,0 +1,2 @@
+IDTarget|Chat|Data
+IDTarget|Move|AttackOrNot|MovingObject|Cot|Hang
