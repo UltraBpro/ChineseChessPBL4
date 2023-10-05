@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638321125826820001
-    m_Hash: 1938681658
+      ticks: 638321152420922751
+    m_Hash: 3207634649
   m_LockFileStatus:
     m_FilePath: C:/Users/DELL/PBL4-GIT/ChineseChessPBL4/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638321125826829965
-    m_Hash: 2375736576
+      ticks: 638321152421092309
+    m_Hash: 2895357602
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
@@ -987,12 +987,12 @@ m_PackageAssets:
         url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.rider.git
         revision: b40b39e6834c2915637f431d002d1f3dd8ec9ce5
         path: 
-    - packageId: com.unity.ide.visualstudio@2.0.17
+    - packageId: com.unity.ide.visualstudio@2.0.21
       testable: 0
       isDirectDependency: 1
-      version: 2.0.17
+      version: 2.0.21
       source: 1
-      resolvedPath: C:\Users\DELL\PBL4-GIT\ChineseChessPBL4\Library\PackageCache\com.unity.ide.visualstudio@2.0.17
+      resolvedPath: C:\Users\DELL\PBL4-GIT\ChineseChessPBL4\Library\PackageCache\com.unity.ide.visualstudio@2.0.21
       assetPath: Packages/com.unity.ide.visualstudio
       name: com.unity.ide.visualstudio
       displayName: Visual Studio Editor
@@ -1001,7 +1001,7 @@ m_PackageAssets:
         email: 
         url: 
       category: 
-      type: asset
+      type: assets
       description: Code editor integration for supporting Visual Studio as code editor
         for unity. Adds support for generating csproj files for intellisense purposes,
         auto discovery of installations, etc.
@@ -1083,13 +1083,13 @@ m_PackageAssets:
       entitlements:
         isAllowed: 1
       isAssetStorePackage: 0
-      datePublishedTicks: 638059987360000000
+      datePublishedTicks: 638300315250000000
       documentationUrl: https://docs.unity3d.com/Packages/com.unity.ide.visualstudio@2.0/manual/index.html
       hasRepository: 1
       repository:
         type: git
         url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.visualstudio.git
-        revision: 1f126893bfb18ea9661fb15771613e841467073c
+        revision: eb2b500b99f6429d3d9dcb8acbcbd366dfbb42be
         path: 
     - packageId: com.unity.ide.vscode@1.2.5
       testable: 0
