@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 
 public class Game : MonoBehaviour
 {
+    public bool ChoiVoiBot = false;
     public GameObject[,] allTitle=new GameObject[9,10];
     public List<GameObject> P1 = new List<GameObject>();
     public List<GameObject> P2 = new List<GameObject>();

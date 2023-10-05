@@ -6,9 +6,18 @@ public class CursorController : MonoBehaviour
 {
     public Texture2D mouse0;
     public Texture2D mouse1;
-    // Start is called before the first frame update
-    private void Start()
+    public static CursorController Instance { get; private set; }
+    void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
     }
     private void Update()

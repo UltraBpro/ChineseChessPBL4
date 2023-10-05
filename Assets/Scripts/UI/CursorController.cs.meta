@@ -4,9 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - mouse0: {instanceID: 0}
-  - mouse1: {instanceID: 0}
-  - hoverSound: {instanceID: 0}
+  - mouse0: {fileID: 2800000, guid: 75dcd5de19344be48ba441ddd22da1df, type: 3}
+  - mouse1: {fileID: 2800000, guid: 122ef6d54c98fd549bd264c8aa6ba3d4, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
