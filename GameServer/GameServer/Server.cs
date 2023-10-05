@@ -10,7 +10,7 @@ namespace GameServer
 {
     class Server
     {
-        public static int MaxConnections=10;
+        public static int MaxConnections=20;
         public static int Port=1006;
         public static Dictionary<int, ClientInSV> DSClient = new Dictionary<int, ClientInSV>();
         public static TcpListener ServerTcpListener;
@@ -34,7 +34,7 @@ namespace GameServer
                     DSClient[i].ketnoiTCPdenSV=clientketnoi;
                     DSClient[i].KhoiTaoClient();
                     DSClient[i].GuiDenClient(Encoding.UTF8.GetBytes("Hello|" + DSClient[i].id));
-                    return;
+                    break;
                 }
             }
         }

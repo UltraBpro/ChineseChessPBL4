@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    public void TuChoiVoiNhauDi()
+    {
+        SceneManager.LoadScene("ChineseChessGame");
+    }
     public void ConnectDenSV()
     {
         string[] diachi=GameObject.Find("TextBoxIP").GetComponent<InputField>().text.Split(':');
@@ -23,6 +27,9 @@ public class MainMenu : MonoBehaviour
             port = "1006";
         }
         GameClient.instance.ConnectDenSV(ip, System.Convert.ToInt32(port));
+    }
+    public void Tatgame() {
+        Application.Quit();
     }
     public void SendSTH()
     {

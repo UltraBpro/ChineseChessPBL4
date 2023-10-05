@@ -126,3 +126,4 @@ MonoBehaviour:
   Team: 1
   controller: {fileID: 0}
   movePlate: {fileID: 4768987486532480076, guid: efe350da0dfbede4d9d624568bfd6804, type: 3}
+  ClickSound: {fileID: 0}
