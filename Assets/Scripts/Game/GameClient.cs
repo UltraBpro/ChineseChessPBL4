@@ -9,10 +9,11 @@ using UnityEngine.UI;
 
 public class GameClient : MonoBehaviour
 {
-    public static GameClient instance;
+    public static GameClient instance { get; private set; }
     public static int BufferSize = 4096;
     string IP;int Port;
-    private int idDuocCap;
+    public int idDuocCap;
+    public int idDoiPhuong;
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
@@ -20,10 +21,6 @@ public class GameClient : MonoBehaviour
     {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(this);
-    }
-    private void Start()
-    {
-        
     }
     public void ConnectDenSV(string IPkn,int Portkn)
     {
@@ -56,7 +53,7 @@ public class GameClient : MonoBehaviour
                 byte[] data = new byte[dodaidaybyte];
                 Array.Copy(buffer, data, dodaidaybyte);
                 //Xử lý thông tin nhận được
-                ThreadManager.ExecuteOnMainThread(() => { GameObject.Find("TextFieldFromSV").GetComponent<Text>().text += Encoding.UTF8.GetString(data) + "\n"; });
+                ThreadManager.ExecuteOnMainThread(()=> GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text = Encoding.UTF8.GetString(data));
                 ReactToServer(Encoding.UTF8.GetString(data));
                 stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
             }
@@ -100,16 +97,23 @@ public class GameClient : MonoBehaviour
             {
                 case "Hello":
                     idDuocCap = System.Convert.ToInt32(info[1]);
-                    Debug.Log("ID của tôi là: " + idDuocCap);
+                    // Xoa sau
+                    if (idDuocCap == 0) idDoiPhuong = 1;
+                    else idDoiPhuong = 0;
+                    Debug.Log("ID của tôi là: " + idDuocCap+"    va id doi phuong la: "+idDoiPhuong);
                     break;
-                case "Chat":
-
-                    break;
-                case "Move":
-                    //GameObject mp = Instantiate(movePlate, new Vector3(cotMovePl, hangMovePl, 0), Quaternion.identity);
+                case "MOVE":
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+                        controllerscript.DiChuyenQuan(GameObject.Find(info[1]), System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]), info[4].Equals("1"));
+                        controllerscript.NextTurn();
+                    });
+                    //GameObject movingobj=GameObject.Find(info[1]);
+                    //GameObject mp = Instantiate(movingobj.GetComponent<QuanCo>().movePlate, new Vector3(System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]), 0), Quaternion.identity);
                     //MovePlate mpScript = mp.GetComponent<MovePlate>();
-                    //if (attack) mpScript.attack = true;
-                    //mpScript.currentMovingObject = gameObject;
+                    //if (System.Convert.ToBoolean(info[4])) mpScript.attack = true;
+                    //mpScript.currentMovingObject = movingobj.gameObject;
                     //mp.SendMessage("OnMouseDown");
                     break;
             }

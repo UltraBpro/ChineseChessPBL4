@@ -7,7 +7,6 @@ public class MovePlate : MonoBehaviour
     public GameObject controller;
     public GameObject currentMovingObject = null;
     public bool attack = false;
-    public int hang, cot;
     public AudioClip MoveSound,EatSound;
     private AudioSource audioSource;
     private void Start()
@@ -34,6 +33,8 @@ public class MovePlate : MonoBehaviour
         //Destroy the move plates including self after the sound has played
         StartCoroutine(WaitAndDestroy(audioSource.clip.length, controlScript));
         controlScript.NextTurn();
+        string CMD = GameClient.instance.idDoiPhuong + "|MOVE|" + currentMovingObject.name + "|" + (int)this.transform.position.x + "|" + (int)this.transform.position.y+"|"+(attack?1:0);
+        if (GlobalThings.GameMode == 2 && controlScript.PlayingTeam!=controlScript.myTeam) GameClient.instance.GuiDenSV(System.Text.Encoding.UTF8.GetBytes(CMD));
     }
     IEnumerator WaitAndDestroy(float waitTime,Game controlScript)
     {

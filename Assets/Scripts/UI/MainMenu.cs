@@ -7,7 +7,6 @@ public class MainMenu : MonoBehaviour {
 
     Animator anim;
 
-    public string newGameSceneName;
     public int quickSaveSlotID;
 
     [Header("Options Panel")]
@@ -108,7 +107,7 @@ public class MainMenu : MonoBehaviour {
 
     }
 
-    public void openContinue_Load()
+    public void openLoginPanel()
     {
         //enable respective panel
         GamePanel.SetActive(false);
@@ -124,13 +123,10 @@ public class MainMenu : MonoBehaviour {
 
     }
 
-    public void newGame()
+    public void newGame(int GameModeCreate)
     {
-        if (!string.IsNullOrEmpty(newGameSceneName))
-            SceneManager.LoadScene(newGameSceneName);
-        else
-            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
-                "add that scene in the Build Settings!");
+            GlobalThings.GameMode = GameModeCreate;
+            SceneManager.LoadScene("ChineseChessGame");
     }
     #endregion
 

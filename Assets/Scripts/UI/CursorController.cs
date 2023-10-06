@@ -6,12 +6,12 @@ public class CursorController : MonoBehaviour
 {
     public Texture2D mouse0;
     public Texture2D mouse1;
-    public static CursorController Instance { get; private set; }
+    public static CursorController instance { get; private set; }
     void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
         else

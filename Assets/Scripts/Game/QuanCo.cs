@@ -22,6 +22,7 @@ public class QuanCo : MonoBehaviour
     }
     public void OnMouseDown()
     {
+        if(GlobalThings.GameMode == 0 || controller.GetComponent<Game>().PlayingTeam == controller.GetComponent<Game>().myTeam)
         if (Team == controller.GetComponent<Game>().PlayingTeam)
         {
             audioSource.clip = ClickSound;

@@ -583,13 +583,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1375287390}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: newGame
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2801,7 +2801,7 @@ RectTransform:
   - {fileID: 714256498}
   - {fileID: 2105076389}
   m_Father: {fileID: 991154813}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5991,8 +5991,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -450}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 443590090}
   - {fileID: 1502024978}
+  - {fileID: 443590090}
   m_Father: {fileID: 1375287389}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6190,9 +6190,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1375287390}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: newGame
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7634,8 +7634,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1375287390}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: openContinue_Load
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: openLoginPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8390,7 +8390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f045d3c92e8b24847a4266b681e631e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newGameSceneName: 
   quickSaveSlotID: 6
   MainOptionsPanel: {fileID: 443590089}
   StartGameOptionsPanel: {fileID: 1502024977}
@@ -9138,7 +9137,7 @@ RectTransform:
   - {fileID: 1251558480}
   - {fileID: 234646242}
   m_Father: {fileID: 991154813}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

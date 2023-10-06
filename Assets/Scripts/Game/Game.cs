@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
-    public bool ChoiVoiBot = false;
     public GameObject[,] allTitle=new GameObject[9,10];
     public List<GameObject> P1 = new List<GameObject>();
     public List<GameObject> P2 = new List<GameObject>();
-    public int PlayingTeam = 1;
+    public int PlayingTeam = 1,myTeam=1;
     // Start is called before the first frame update
     private void Start()
     {
@@ -70,14 +69,30 @@ public class Game : MonoBehaviour
     {
         if (PlayingTeam == 2) PlayingTeam = 1;
         else PlayingTeam ++;
+        if (GlobalThings.GameMode == 1) BotPlay();
     }
     public GameObject CheckObjOnTitle(int cot,int hang)
     {
         if (cot < 0 || cot > 8 || hang < 0 || hang > 9) return null;
         return allTitle[cot, hang];
     }
+    private void BotPlay()
+    {
+        //BOT PLAY, DUHHH
+    }
+    //TEMP SE XOA SAU
+    public void ConnectDenSV()
+    {
+        GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
+    }
+    public void TEMP()
+    {
+        GlobalThings.GameMode = 2;
+        if (GameClient.instance.idDuocCap == 0) myTeam = 1;
+        else myTeam = 2;
+    }
 }
-public static class GlobalFunctions
+public static class GlobalThings
 {
-    
+    public static int GameMode=0;
 }

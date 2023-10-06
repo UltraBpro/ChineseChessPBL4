@@ -78,6 +78,8 @@ namespace GameServer
             {
                 // Tách chuỗi thành các phần thông tin ""TARGET"|CMD"|"DATA"|...
                 string[] info = command.Split(new char[] { '|' }, 2) ;
+                Console.WriteLine(info[0]);
+                Console.WriteLine(info[1]);
                 ClientInSV Target = Server.DSClient[Convert.ToInt32(info[0])];
                 Target.GuiDenClient(Encoding.UTF8.GetBytes(info[1]));
             }
