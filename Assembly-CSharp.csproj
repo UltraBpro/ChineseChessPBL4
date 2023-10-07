@@ -62,7 +62,6 @@
     <Compile Include="Assets\Scripts\Game\GameClient.cs" />
     <Compile Include="Assets\Scripts\UI\CursorController.cs" />
     <Compile Include="Assets\Scripts\Game\Game.cs" />
-    <Compile Include="Assets\Scripts\UI\MainMenuTemp.cs" />
     <Compile Include="Assets\Scripts\Game\QuanCo.cs" />
   </ItemGroup>
   <ItemGroup>

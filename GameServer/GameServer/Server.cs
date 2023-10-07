@@ -13,6 +13,7 @@ namespace GameServer
         public static int MaxConnections=20;
         public static int Port=1006;
         public static Dictionary<int, ClientInSV> DSClient = new Dictionary<int, ClientInSV>();
+        public static Queue<int> MatchmakingQueue = new Queue<int>();
         public static TcpListener ServerTcpListener;
         public static void Chay()
         {
@@ -33,10 +34,28 @@ namespace GameServer
                 {
                     DSClient[i].ketnoiTCPdenSV=clientketnoi;
                     DSClient[i].KhoiTaoClient();
-                    DSClient[i].GuiDenClient(Encoding.UTF8.GetBytes("Hello|" + DSClient[i].id));
+                    DSClient[i].GuiDenClient(Encoding.UTF8.GetBytes("HELLO|" + DSClient[i].id));
                     break;
                 }
             }
+        }
+        public static void AddToMMQueue(int idadd)
+        {
+            MatchmakingQueue.Enqueue(idadd);
+            if (MatchmakingQueue.Count >= 2)
+            {
+                TaoMatch(MatchmakingQueue.Dequeue(), MatchmakingQueue.Dequeue());
+            }
+        }
+        public static void TaoMatch(int id1,int id2)
+        {
+            Console.WriteLine("Tien hanh ghep tran giua client" + id1 + " va client" + id2);
+            byte[] data = Encoding.UTF8.GetBytes("MATCH|1|" + id2);
+            DSClient[id1].GuiDenClient(data);
+
+            // Gửi ID của client1 tới client2
+            data = Encoding.ASCII.GetBytes("MATCH|2|" + id1);
+            DSClient[id2].GuiDenClient(data);
         }
     }
 }

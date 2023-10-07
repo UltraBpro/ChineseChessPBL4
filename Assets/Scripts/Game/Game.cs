@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -81,6 +82,16 @@ public class Game : MonoBehaviour
         //BOT PLAY, DUHHH
     }
     //TEMP SE XOA SAU
+    public void Chat()
+    {
+        ThreadManager.ExecuteOnMainThread(() =>
+        {
+        string content = GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
+        GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text = "";
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
+        GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + content;
+        });
+    }
     public void ConnectDenSV()
     {
         GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
@@ -88,8 +99,7 @@ public class Game : MonoBehaviour
     public void TEMP()
     {
         GlobalThings.GameMode = 2;
-        if (GameClient.instance.idDuocCap == 0) myTeam = 1;
-        else myTeam = 2;
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|"+GameClient.instance.idDuocCap));
     }
 }
 public static class GlobalThings

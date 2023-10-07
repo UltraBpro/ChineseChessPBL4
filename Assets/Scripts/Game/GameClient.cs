@@ -53,7 +53,6 @@ public class GameClient : MonoBehaviour
                 byte[] data = new byte[dodaidaybyte];
                 Array.Copy(buffer, data, dodaidaybyte);
                 //Xử lý thông tin nhận được
-                ThreadManager.ExecuteOnMainThread(()=> GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text = Encoding.UTF8.GetString(data));
                 ReactToServer(Encoding.UTF8.GetString(data));
                 stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
             }
@@ -95,12 +94,19 @@ public class GameClient : MonoBehaviour
             // Kiểm tra nếu info1 là "hello"
             switch (info[0])
             {
-                case "Hello":
+                case "HELLO":
                     idDuocCap = System.Convert.ToInt32(info[1]);
-                    // Xoa sau
-                    if (idDuocCap == 0) idDoiPhuong = 1;
-                    else idDoiPhuong = 0;
-                    Debug.Log("ID của tôi là: " + idDuocCap+"    va id doi phuong la: "+idDoiPhuong);
+                    break;
+                case "CHAT":
+                    ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text +="\n"+ info[1]);
+                    break;
+                case "MATCH":
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+                        controllerscript.myTeam = System.Convert.ToInt32(info[1]);
+                        idDoiPhuong= System.Convert.ToInt32(info[2]);
+                    });
                     break;
                 case "MOVE":
                     ThreadManager.ExecuteOnMainThread(() =>
