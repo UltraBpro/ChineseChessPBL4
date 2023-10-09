@@ -15,12 +15,20 @@ public class MainMenu : MonoBehaviour {
     public GameObject GamePanel;
     public GameObject ControlsPanel;
     public GameObject GfxPanel;
-    public GameObject LoadGamePanel;
+    public GameObject LoginPanel;
+
+    public AudioClip ClickSound;
+    public AudioClip HoverSound;
+    private AudioSource audioSource;
 
     // Use this for initialization
     void Start () {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
         anim = GetComponent<Animator>();
-
         //new key
         PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
     }
@@ -67,7 +75,7 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(true);
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(false);
+        LoginPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -82,7 +90,7 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(false);
         ControlsPanel.SetActive(true);
         GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(false);
+        LoginPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -97,7 +105,7 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(false);
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(true);
-        LoadGamePanel.SetActive(false);
+        LoginPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -113,7 +121,7 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(false);
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(true);
+        LoginPanel.SetActive(true);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -163,11 +171,14 @@ public class MainMenu : MonoBehaviour {
     #region Sounds
     public void playHoverClip()
     {
-       
+        audioSource.clip = HoverSound;
+        audioSource.Play();
     }
 
-    void playClickSound() {
-
+    void playClickSound() 
+    {
+        audioSource.clip = ClickSound;
+        audioSource.Play();
     }
 
 

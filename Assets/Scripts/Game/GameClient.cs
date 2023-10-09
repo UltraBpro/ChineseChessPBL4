@@ -114,13 +114,14 @@ public class GameClient : MonoBehaviour
                         Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
                         controllerscript.DiChuyenQuan(GameObject.Find(info[1]), System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]), info[4].Equals("1"));
                         controllerscript.NextTurn();
-                    });
+                    
                     //GameObject movingobj=GameObject.Find(info[1]);
                     //GameObject mp = Instantiate(movingobj.GetComponent<QuanCo>().movePlate, new Vector3(System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]), 0), Quaternion.identity);
                     //MovePlate mpScript = mp.GetComponent<MovePlate>();
                     //if (System.Convert.ToBoolean(info[4])) mpScript.attack = true;
                     //mpScript.currentMovingObject = movingobj.gameObject;
                     //mp.SendMessage("OnMouseDown");
+                    });
                     break;
             }
             // Thêm các trường hợp xử lý khác tại đây dựa trên giá trị của info1, info2, v.v...
