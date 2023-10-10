@@ -5,7 +5,7 @@ using UnityEngine;
 public class QuanCo : MonoBehaviour
 {
     //public Sprite Goc,Up;
-    public string TenQuanCo;
+    public string TenQuanCo,TenThatCoUp;
     public int Team;
     public GameObject controller;
     public GameObject movePlate;
@@ -210,6 +210,35 @@ public class QuanCo : MonoBehaviour
                 PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
                 PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
                 break;
+        }
+    }
+    public void LoadSkin()
+    {
+        SpriteRenderer SpriteQuanCo=GetComponent<SpriteRenderer>();
+        switch (TenQuanCo)
+        {
+            case "vua":
+                SpriteQuanCo.sprite= Resources.Load<Sprite>("Sprites/Game/Skin"+GlobalThings.SkinID+"/0Vua"+(Team==1?"Do":"Den"));
+                break;
+            case "si":
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/1Si" + (Team == 1 ? "Do" : "Den"));
+                break;
+            case "tuong":
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/2Tuong" + (Team == 1 ? "Do" : "Den"));
+                break;
+            case "ma":
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/3Ma" + (Team == 1 ? "Do" : "Den"));
+                break;
+            case "xe":
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/4Xe" + (Team == 1 ? "Do" : "Den"));
+                break;
+            case "phao":
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/5Phao" + (Team == 1 ? "Do" : "Den"));
+                break;
+            case "tot":
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/6Tot" + (Team == 1 ? "Do" : "Den"));
+                break;
+                
         }
     }
 }

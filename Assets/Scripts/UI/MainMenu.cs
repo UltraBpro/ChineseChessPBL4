@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour {
     public GameObject ControlsPanel;
     public GameObject GfxPanel;
     public GameObject LoginPanel;
+    public GameObject SkinPanel;
 
     public AudioClip ClickSound;
     public AudioClip HoverSound;
@@ -76,6 +77,7 @@ public class MainMenu : MonoBehaviour {
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(false);
         LoginPanel.SetActive(false);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -91,6 +93,7 @@ public class MainMenu : MonoBehaviour {
         ControlsPanel.SetActive(true);
         GfxPanel.SetActive(false);
         LoginPanel.SetActive(false);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -106,6 +109,7 @@ public class MainMenu : MonoBehaviour {
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(true);
         LoginPanel.SetActive(false);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -122,6 +126,7 @@ public class MainMenu : MonoBehaviour {
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(false);
         LoginPanel.SetActive(true);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -129,6 +134,26 @@ public class MainMenu : MonoBehaviour {
         //play click sfx
         playClickSound();
 
+    }
+    public void openSkinPanel()
+    {
+        //enable respective panel
+        GamePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
+        GfxPanel.SetActive(false);
+        LoginPanel.SetActive(false);
+        SkinPanel.SetActive(true);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+    public void SkinSelected(int skinid)
+    {
+        GlobalThings.SkinID = skinid;
     }
 
     public void newGame(int GameModeCreate)
@@ -155,6 +180,7 @@ public class MainMenu : MonoBehaviour {
     public void back_options_panels()
     {
         //simply play anim for CLOSING main options panel
+        SkinPanel.SetActive(false);
         anim.Play("OptTweenAnim_off");
         
         //play click sfx

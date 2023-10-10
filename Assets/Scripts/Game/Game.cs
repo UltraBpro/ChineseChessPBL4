@@ -11,12 +11,18 @@ public class Game : MonoBehaviour
     public List<GameObject> P1 = new List<GameObject>();
     public List<GameObject> P2 = new List<GameObject>();
     public int PlayingTeam = 1,myTeam=1;
+    public AudioClip MoveSound, EatSound;
+    private AudioSource audioSource;
     // Start is called before the first frame update
     private void Start()
     {
-        foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }
-        foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; }
-        
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
+        foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
     }
     public void DestroyMovePlates()
     {
@@ -40,7 +46,10 @@ public class Game : MonoBehaviour
         if (attack)
         {
             DietQuan(cot,hang);
+            audioSource.clip = EatSound;
         }
+        else audioSource.clip = MoveSound;
+        audioSource.Play();
         allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y] = null;
         currentMovingObject.transform.position = new Vector3(cot, hang);
         //Update the matrix
@@ -48,8 +57,8 @@ public class Game : MonoBehaviour
         if (currentMovingObject.GetComponent<QuanCo>().TenQuanCo == "tot")
         {
             QuanCo conTot = currentMovingObject.GetComponent<QuanCo>();
-            if (conTot.Team == 1 && conTot.transform.position.y >= 5) conTot.TenQuanCo = "totsangxong";
-            if (conTot.Team == 2 && conTot.transform.position.y <= 4) conTot.TenQuanCo = "totsangxong";
+            if (conTot.Team == 1 && conTot.transform.position.y >= 5) conTot.TenQuanCo += "sangxong";
+            if (conTot.Team == 2 && conTot.transform.position.y <= 4) conTot.TenQuanCo += "sangxong";
         }
     }
     public void DietQuan(int cot,int hang)
@@ -81,6 +90,33 @@ public class Game : MonoBehaviour
     {
         //BOT PLAY, DUHHH
     }
+    public void LoadCoUp()
+    {
+        List<string> names = new List<string> { "si", "tuong", "ma", "xe","phao",
+                                                "si", "tuong", "ma", "xe","phao",
+                                                "tot","tot","tot","tot","tot",
+        };
+        for(int i = 1; i < P1.Count; i++)
+        {
+            int index = Random.Range(0, names.Count - 1);
+            string randomName = names[index];
+            P1[i].GetComponent<QuanCo>().TenThatCoUp = randomName;
+            P1[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin0/BlankDo");
+            names.RemoveAt(index);
+        }
+        names=new List<string>{ "si", "tuong", "ma", "xe","phao",
+                                "si", "tuong", "ma", "xe","phao",
+                                "tot","tot","tot","tot","tot",
+        };
+        for (int i = 1; i < P2.Count; i++)
+        {
+            int index = Random.Range(0, names.Count - 1);
+            string randomName = names[index];
+            P2[i].GetComponent<QuanCo>().TenThatCoUp = randomName;
+            P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin0/BlankDen");
+            names.RemoveAt(index);
+        }
+    }
     //TEMP SE XOA SAU
     public void Chat()
     {
@@ -105,4 +141,6 @@ public class Game : MonoBehaviour
 public static class GlobalThings
 {
     public static int GameMode=0;
+    public static int GameRule = 0;
+    public static int SkinID = 0;
 }
