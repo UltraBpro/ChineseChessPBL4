@@ -5,7 +5,8 @@ using UnityEngine;
 public class QuanCo : MonoBehaviour
 {
     //public Sprite Goc,Up;
-    public string TenQuanCo,TenThatCoUp;
+    public string TenQuanCo;
+    public string TenThatCoUp;
     public int Team;
     public GameObject controller;
     public GameObject movePlate;
@@ -79,16 +80,16 @@ public class QuanCo : MonoBehaviour
                 if(this.transform.position.x != 3) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
                 break;
             case "si":
-                if ((this.transform.position.x != 5)&& ((Team == 1 && this.transform.position.y != 2) || Team == 2)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y + 1);
-                if ((this.transform.position.x != 3)&& ((Team == 1 && this.transform.position.y != 2) || Team == 2)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y + 1);
-                if ((this.transform.position.x != 3)&& ((Team == 2 && this.transform.position.y != 7) || Team == 1)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y - 1);
-                if ((this.transform.position.x != 5)&& ((Team == 2 && this.transform.position.y != 7) || Team == 1)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y - 1);
+                if (((this.transform.position.x != 5)&& ((Team == 1 && this.transform.position.y != 2) || Team == 2))|| (GlobalThings.GameRule == 1&& TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y + 1);
+                if (((this.transform.position.x != 3)&& ((Team == 1 && this.transform.position.y != 2) || Team == 2))|| (GlobalThings.GameRule == 1&& TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y + 1);
+                if (((this.transform.position.x != 3)&& ((Team == 2 && this.transform.position.y != 7) || Team == 1))|| (GlobalThings.GameRule == 1 &&TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y - 1);
+                if (((this.transform.position.x != 5)&& ((Team == 2 && this.transform.position.y != 7) || Team == 1))|| (GlobalThings.GameRule == 1 && TenThatCoUp==null)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y - 1);
                 break;
             case "tuong":
-                if (((Team == 1 && this.transform.position.y < 4) || Team == 2)&& controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y + 2);
-                if (((Team == 2 && this.transform.position.y > 5) || Team == 1)&& controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y - 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y - 2);
-                if (((Team == 2 && this.transform.position.y > 5) || Team == 1)&& controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x + 1, (int)this.transform.position.y - 1) == null) PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y - 2);
-                if (((Team == 1 && this.transform.position.y < 4) || Team == 2)&& controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x + 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y + 2);
+                if (((Team == 1 && this.transform.position.y < 4) || Team == 2|| GlobalThings.GameRule==1)&& controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y + 2);
+                if (((Team == 2 && this.transform.position.y > 5) || Team == 1 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y - 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y - 2);
+                if (((Team == 2 && this.transform.position.y > 5) || Team == 1 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x + 1, (int)this.transform.position.y - 1) == null) PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y - 2);
+                if (((Team == 1 && this.transform.position.y < 4) || Team == 2 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x + 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y + 2);
                 break;
             case "ma":
                 if (controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y) == null)
@@ -238,7 +239,6 @@ public class QuanCo : MonoBehaviour
             case "tot":
                 SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/6Tot" + (Team == 1 ? "Do" : "Den"));
                 break;
-                
         }
     }
 }

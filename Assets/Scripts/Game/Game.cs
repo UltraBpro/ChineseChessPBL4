@@ -41,11 +41,11 @@ public class Game : MonoBehaviour
             movePlates[i].GetComponent<SpriteRenderer>().enabled = false;
         }
     }
-    public void DiChuyenQuan(GameObject currentMovingObject, int cot,int hang,bool attack)
+    public void DiChuyenQuan(GameObject currentMovingObject, int cot, int hang, bool attack)
     {
         if (attack)
         {
-            DietQuan(cot,hang);
+            DietQuan(cot, hang);
             audioSource.clip = EatSound;
         }
         else audioSource.clip = MoveSound;
@@ -54,11 +54,15 @@ public class Game : MonoBehaviour
         currentMovingObject.transform.position = new Vector3(cot, hang);
         //Update the matrix
         allTitle[cot, hang] = currentMovingObject;
+        //extra
+        QuanCo concodangdi = currentMovingObject.GetComponent<QuanCo>();
+        if (GlobalThings.GameRule == 1)
+            if (concodangdi.TenThatCoUp != null) { concodangdi.TenQuanCo = concodangdi.TenThatCoUp;concodangdi.LoadSkin(); concodangdi.TenThatCoUp = null; }
+        
         if (currentMovingObject.GetComponent<QuanCo>().TenQuanCo == "tot")
         {
-            QuanCo conTot = currentMovingObject.GetComponent<QuanCo>();
-            if (conTot.Team == 1 && conTot.transform.position.y >= 5) conTot.TenQuanCo += "sangxong";
-            if (conTot.Team == 2 && conTot.transform.position.y <= 4) conTot.TenQuanCo += "sangxong";
+            if (concodangdi.Team == 1 && concodangdi.transform.position.y >= 5) concodangdi.TenQuanCo += "sangxong";
+            if (concodangdi.Team == 2 && concodangdi.transform.position.y <= 4) concodangdi.TenQuanCo += "sangxong";
         }
     }
     public void DietQuan(int cot,int hang)
@@ -92,6 +96,7 @@ public class Game : MonoBehaviour
     }
     public void LoadCoUp()
     {
+        GlobalThings.GameRule = 1;
         List<string> names = new List<string> { "si", "tuong", "ma", "xe","phao",
                                                 "si", "tuong", "ma", "xe","phao",
                                                 "tot","tot","tot","tot","tot",
@@ -101,7 +106,7 @@ public class Game : MonoBehaviour
             int index = Random.Range(0, names.Count - 1);
             string randomName = names[index];
             P1[i].GetComponent<QuanCo>().TenThatCoUp = randomName;
-            P1[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin0/BlankDo");
+            P1[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDo");
             names.RemoveAt(index);
         }
         names=new List<string>{ "si", "tuong", "ma", "xe","phao",
@@ -113,7 +118,7 @@ public class Game : MonoBehaviour
             int index = Random.Range(0, names.Count - 1);
             string randomName = names[index];
             P2[i].GetComponent<QuanCo>().TenThatCoUp = randomName;
-            P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin0/BlankDen");
+            P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDen");
             names.RemoveAt(index);
         }
     }
@@ -130,7 +135,10 @@ public class Game : MonoBehaviour
     }
     public void ConnectDenSV()
     {
-        GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
+        ThreadManager.ExecuteOnMainThread(() =>
+        {
+            GameClient.instance.ConnectDenSV(GameObject.Find("TextBoxIPTEMP").GetComponent<InputField>().text, 1006);
+        });
     }
     public void TEMP()
     {
