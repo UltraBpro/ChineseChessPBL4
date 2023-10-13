@@ -201,7 +201,7 @@ public class MainMenu : MonoBehaviour {
         audioSource.Play();
     }
 
-    void playClickSound() 
+    public void playClickSound() 
     {
         audioSource.clip = ClickSound;
         audioSource.Play();

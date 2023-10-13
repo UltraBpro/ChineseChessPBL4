@@ -12,7 +12,9 @@ public class Game : MonoBehaviour
     public List<GameObject> P2 = new List<GameObject>();
     public int PlayingTeam = 1,myTeam=1;
     public AudioClip MoveSound, EatSound;
+    public Move LastMove;
     private AudioSource audioSource;
+    private float P1Jail=0, P2Jail=0;
     // Start is called before the first frame update
     private void Start()
     {
@@ -33,51 +35,68 @@ public class Game : MonoBehaviour
             Destroy(movePlates[i]);
         }
     }
-    public void RemoveMovePlates()
+    public void DiChuyenQuan(GameObject currentMovingObject, int cot, int hang)
     {
-        GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-        for (int i = 0; i < movePlates.Length; i++)
+        LastMove = new Move
         {
-            movePlates[i].GetComponent<SpriteRenderer>().enabled = false;
-        }
-    }
-    public void DiChuyenQuan(GameObject currentMovingObject, int cot, int hang, bool attack)
-    {
-        if (attack)
+            movingObj = currentMovingObject,
+            oldPos = new Vector3((int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y, 0),
+            targetPos = new Vector3(cot, hang, 0),
+            PreMove=LastMove,
+            capturedObj = null
+        };
+        if (allTitle[cot, hang]!=null)
         {
+            LastMove.capturedObj = allTitle[cot, hang];
             DietQuan(cot, hang);
             audioSource.clip = EatSound;
         }
         else audioSource.clip = MoveSound;
         audioSource.Play();
-        allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y] = null;
-        currentMovingObject.transform.position = new Vector3(cot, hang);
+        if(allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y]==currentMovingObject) allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y] = null;
+        currentMovingObject.transform.position = new Vector3(cot, hang,0);
         //Update the matrix
         allTitle[cot, hang] = currentMovingObject;
         //extra
         QuanCo concodangdi = currentMovingObject.GetComponent<QuanCo>();
         if (GlobalThings.GameRule == 1)
             if (concodangdi.TenThatCoUp != null) { concodangdi.TenQuanCo = concodangdi.TenThatCoUp;concodangdi.LoadSkin(); concodangdi.TenThatCoUp = null; }
-        
-        if (currentMovingObject.GetComponent<QuanCo>().TenQuanCo == "tot")
-        {
-            if (concodangdi.Team == 1 && concodangdi.transform.position.y >= 5) concodangdi.TenQuanCo += "sangxong";
-            if (concodangdi.Team == 2 && concodangdi.transform.position.y <= 4) concodangdi.TenQuanCo += "sangxong";
-        }
     }
     public void DietQuan(int cot,int hang)
     {
         GameObject cp = allTitle[cot, hang];
         QuanCo loaiQuan = cp.GetComponent<QuanCo>();
-        if (loaiQuan.Team == 1) P1.Remove(cp);
-        else P2.Remove(cp);
         allTitle[cot, hang] = null;
         if (loaiQuan.TenQuanCo == "vua")
         {
             if (loaiQuan.Team == 1) Debug.Log("Player 2 win");
             else Debug.Log("Player 1 win");
         }
-        Destroy(cp);
+        cp.transform.position=new Vector3(0.5f * (loaiQuan.Team == 1 ? P1Jail++: P2Jail++), loaiQuan.Team==1?-1:10, loaiQuan.Team == 1 ? -P1Jail : -P2Jail);
+        cp.GetComponent<BoxCollider2D>().enabled = false;
+    }
+    public void HoanCo()
+    {
+        if (LastMove != null)
+        {
+            if (LastMove.capturedObj != null)
+            {
+                LastMove.capturedObj.transform.position = LastMove.targetPos;
+                allTitle[(int)LastMove.targetPos.x, (int)LastMove.targetPos.y] = LastMove.capturedObj;
+                LastMove.capturedObj.GetComponent<BoxCollider2D>().enabled = true;
+                if (LastMove.capturedObj.GetComponent<QuanCo>().Team == 1) P1Jail--;
+                else P2Jail--;
+            }
+            if (allTitle[(int)LastMove.movingObj.transform.position.x, (int)LastMove.movingObj.transform.position.y] == LastMove.movingObj) allTitle[(int)LastMove.movingObj.transform.position.x, (int)LastMove.movingObj.transform.position.y] = null;
+            LastMove.movingObj.transform.position = LastMove.oldPos;
+            //Update the matrix
+            allTitle[(int)LastMove.oldPos.x, (int)LastMove.oldPos.y] = LastMove.movingObj;
+            LastMove = LastMove.PreMove;
+            if (PlayingTeam == 2) PlayingTeam = 1;
+            else PlayingTeam++;
+            DestroyMovePlates();
+        }
+        else Debug.Log("Lạy hồn m đã di chuyển chi đâu? Đào bug à?");
     }
     public void NextTurn()
     {
@@ -90,10 +109,7 @@ public class Game : MonoBehaviour
         if (cot < 0 || cot > 8 || hang < 0 || hang > 9) return null;
         return allTitle[cot, hang];
     }
-    private void BotPlay()
-    {
-        //BOT PLAY, DUHHH
-    }
+
     public void LoadCoUp()
     {
         GlobalThings.GameRule = 1;
@@ -122,6 +138,47 @@ public class Game : MonoBehaviour
             names.RemoveAt(index);
         }
     }
+    /// <summary> ta bi dien LALALALALALADLAJLAKJWLDKJALWDJALJDALKJDWLKJDWA
+    /// 
+    private void BotPlay()
+    {
+        //BOT PLAY, DUHHH
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ///
+    /// </summary> WTF CLGT CAI DONG GI O TREN THEEEEEEEEEAOWHJLKFWA LKFJWAJFWALKJDWALK
     //TEMP SE XOA SAU
     public void Chat()
     {
@@ -145,6 +202,14 @@ public class Game : MonoBehaviour
         GlobalThings.GameMode = 2;
         GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|"+GameClient.instance.idDuocCap));
     }
+}
+public class Move
+{
+    public Vector3 oldPos; 
+    public GameObject movingObj;
+    public Vector3 targetPos;
+    public GameObject capturedObj=null;
+    public Move PreMove=null;
 }
 public static class GlobalThings
 {

@@ -112,7 +112,7 @@ public class GameClient : MonoBehaviour
                     ThreadManager.ExecuteOnMainThread(() =>
                     {
                         Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
-                        controllerscript.DiChuyenQuan(GameObject.Find(info[1]), System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]), info[4].Equals("1"));
+                        controllerscript.DiChuyenQuan(GameObject.Find(info[1]), System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]));
                         controllerscript.NextTurn();
                     
                     //GameObject movingobj=GameObject.Find(info[1]);

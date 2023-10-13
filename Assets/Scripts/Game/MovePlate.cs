@@ -18,10 +18,10 @@ public class MovePlate : MonoBehaviour
     public void OnMouseDown()
     {
         Game controlScript = controller.GetComponent<Game>();
-        controlScript.DiChuyenQuan(currentMovingObject, (int)this.transform.position.x, (int)this.transform.position.y, attack);
+        controlScript.DiChuyenQuan(currentMovingObject, (int)this.transform.position.x, (int)this.transform.position.y);
         controlScript.DestroyMovePlates();
         controlScript.NextTurn();
-        string CMD = GameClient.instance.idDoiPhuong + "|MOVE|" + currentMovingObject.name + "|" + (int)this.transform.position.x + "|" + (int)this.transform.position.y+"|"+(attack?1:0);
+        string CMD = GameClient.instance.idDoiPhuong + "|MOVE|" + currentMovingObject.name + "|" + (int)this.transform.position.x + "|" + (int)this.transform.position.y;
         if (GlobalThings.GameMode == 2 && controlScript.PlayingTeam!=controlScript.myTeam) GameClient.instance.GuiDenSV(System.Text.Encoding.UTF8.GetBytes(CMD));
         //if (GlobalThings.GameRule == 1)
         //{

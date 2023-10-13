@@ -18,7 +18,7 @@ namespace GameServer
         public static void Chay()
         {
             for (int i = 0; i < MaxConnections; i++) DSClient.Add(i, new ClientInSV(i));
-            ServerTcpListener = new TcpListener(IPAddress.Any, Port);
+            ServerTcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), Port);
             ServerTcpListener.Start();
             ServerTcpListener.BeginAcceptTcpClient(new AsyncCallback(NhanKetNoi), null);
             Console.WriteLine("Tao SV o Port: " + Port);

@@ -204,7 +204,12 @@ public class QuanCo : MonoBehaviour
             case "tot":
                 if (Team == 1) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
                 else PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y - 1);
-                break;
+                if ((Team == 1 && transform.position.y >= 5)|| (Team == 2 && transform.position.y <= 4))
+                {
+                    PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
+                    PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
+                }
+                    break;
             case "totsangxong":
                 if (Team == 1) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
                 else PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y - 1);
