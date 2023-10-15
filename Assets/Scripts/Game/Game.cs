@@ -103,6 +103,22 @@ public class Game : MonoBehaviour
         if (PlayingTeam == 2) PlayingTeam = 1;
         else PlayingTeam++;
     }
+    public bool CheckEndGame()
+    {
+        int founded = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                if(allTitle[i,j]!=null)
+                if (allTitle[i, j].tag == "VuaDen"|| allTitle[i, j].tag == "VuaDo")
+                {
+                    founded++;
+                }
+            }
+        }
+        return founded != 2;
+    }
     public GameObject CheckObjOnTitle(int cot, int hang)
     {
         if (cot < 0 || cot > 8 || hang < 0 || hang > 9) return null;
@@ -142,7 +158,6 @@ public class Game : MonoBehaviour
     {
         Move botmove = Minimax(2, true).Item1;
         DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
-        Debug.Log("FINAL:  " + BoardEvaluation());
         NextTurn();
         //BOT PLAY, DUHHH
     }
@@ -209,7 +224,6 @@ public class Game : MonoBehaviour
                 }
             }
         }
-        Debug.Log(score);
         return score;
     }
     public List<Move> AllPossibleMove()
@@ -418,7 +432,7 @@ public class Game : MonoBehaviour
     //            allTitle[targetx, targety] = tempcapture;
     public (Move, int) Minimax(int depth, bool maximizingPlayer)
     {
-        if (depth == 0 || GameObject.FindGameObjectWithTag("VuaDen") == null || GameObject.FindGameObjectWithTag("VuaDo") == null)
+        if (depth == 0 || CheckEndGame())
         {
             return (null, BoardEvaluation());
         }
