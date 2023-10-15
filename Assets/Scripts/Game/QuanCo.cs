@@ -23,16 +23,16 @@ public class QuanCo : MonoBehaviour
     }
     public void OnMouseDown()
     {
-        if(GlobalThings.GameMode == 0 || controller.GetComponent<Game>().PlayingTeam == controller.GetComponent<Game>().myTeam)
-        if (Team == controller.GetComponent<Game>().PlayingTeam)
-        {
-            audioSource.clip = ClickSound;
-            audioSource.Play();
-            controller.GetComponent<Game>().DestroyMovePlates();
-            CreateMovePlates();
-        }
+        if (GlobalThings.GameMode == 0 || controller.GetComponent<Game>().PlayingTeam == controller.GetComponent<Game>().myTeam)
+            if (Team == controller.GetComponent<Game>().PlayingTeam)
+            {
+                audioSource.clip = ClickSound;
+                audioSource.Play();
+                controller.GetComponent<Game>().DestroyMovePlates();
+                CreateMovePlates();
+            }
     }
-    public void MovePlateSpawn(int cotMovePl, int hangMovePl,bool attack=false)
+    public void MovePlateSpawn(int cotMovePl, int hangMovePl, bool attack = false)
     {
         GameObject mp = Instantiate(movePlate, new Vector3(cotMovePl, hangMovePl, 0), Quaternion.identity);
         MovePlate mpScript = mp.GetComponent<MovePlate>();
@@ -44,10 +44,10 @@ public class QuanCo : MonoBehaviour
         if (cot >= 0 && cot <= 8 && hang >= 0 && hang <= 9)
         {
             Game controlscript = controller.GetComponent<Game>();
-            
-            if (controlscript.allTitle[cot, hang] != null) 
+
+            if (controlscript.allTitle[cot, hang] != null)
             {
-                if (controlscript.allTitle[cot, hang].GetComponent<QuanCo>().Team != this.Team) 
+                if (controlscript.allTitle[cot, hang].GetComponent<QuanCo>().Team != this.Team)
                     MovePlateSpawn(cot, hang, true);
             }
             else MovePlateSpawn(cot, hang);
@@ -58,12 +58,12 @@ public class QuanCo : MonoBehaviour
         switch (TenQuanCo)
         {
             case "vua":
-                if(Team==1) for (int y = (int)this.transform.position.y + 1; y < 10; y++)
+                if (Team == 1) for (int y = (int)this.transform.position.y + 1; y < 10; y++)
                     {
-                        if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y] != null) 
+                        if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y] != null)
                         {
                             if (controller.GetComponent<Game>().allTitle[(int)this.transform.position.x, y].GetComponent<QuanCo>().TenQuanCo == "vua") PointMovePlate((int)this.transform.position.x, y);
-                            break; 
+                            break;
                         }
                     }
                 else for (int y = (int)this.transform.position.y - 1; y >= 0; y--)
@@ -74,19 +74,19 @@ public class QuanCo : MonoBehaviour
                             break;
                         }
                     }
-                if ((Team == 1 && this.transform.position.y != 2) || Team == 2)PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
+                if ((Team == 1 && this.transform.position.y != 2) || Team == 2) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
                 if ((Team == 2 && this.transform.position.y != 7) || Team == 1) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y - 1);
-                if(this.transform.position.x != 5) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
-                if(this.transform.position.x != 3) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
+                if (this.transform.position.x != 5) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
+                if (this.transform.position.x != 3) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
                 break;
             case "si":
-                if (((this.transform.position.x != 5)&& ((Team == 1 && this.transform.position.y != 2) || Team == 2))|| (GlobalThings.GameRule == 1&& TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y + 1);
-                if (((this.transform.position.x != 3)&& ((Team == 1 && this.transform.position.y != 2) || Team == 2))|| (GlobalThings.GameRule == 1&& TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y + 1);
-                if (((this.transform.position.x != 3)&& ((Team == 2 && this.transform.position.y != 7) || Team == 1))|| (GlobalThings.GameRule == 1 &&TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y - 1);
-                if (((this.transform.position.x != 5)&& ((Team == 2 && this.transform.position.y != 7) || Team == 1))|| (GlobalThings.GameRule == 1 && TenThatCoUp==null)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y - 1);
+                if (((this.transform.position.x != 5) && ((Team == 1 && this.transform.position.y != 2) || Team == 2)) || (GlobalThings.GameRule == 1 && TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y + 1);
+                if (((this.transform.position.x != 3) && ((Team == 1 && this.transform.position.y != 2) || Team == 2)) || (GlobalThings.GameRule == 1 && TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y + 1);
+                if (((this.transform.position.x != 3) && ((Team == 2 && this.transform.position.y != 7) || Team == 1)) || (GlobalThings.GameRule == 1 && TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y - 1);
+                if (((this.transform.position.x != 5) && ((Team == 2 && this.transform.position.y != 7) || Team == 1)) || (GlobalThings.GameRule == 1 && TenThatCoUp == null)) PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y - 1);
                 break;
             case "tuong":
-                if (((Team == 1 && this.transform.position.y < 4) || Team == 2|| GlobalThings.GameRule==1)&& controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y + 2);
+                if (((Team == 1 && this.transform.position.y < 4) || Team == 2 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y + 2);
                 if (((Team == 2 && this.transform.position.y > 5) || Team == 1 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x - 1, (int)this.transform.position.y - 1) == null) PointMovePlate((int)this.transform.position.x - 2, (int)this.transform.position.y - 2);
                 if (((Team == 2 && this.transform.position.y > 5) || Team == 1 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x + 1, (int)this.transform.position.y - 1) == null) PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y - 2);
                 if (((Team == 1 && this.transform.position.y < 4) || Team == 2 || GlobalThings.GameRule == 1) && controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x + 1, (int)this.transform.position.y + 1) == null) PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y + 2);
@@ -102,12 +102,12 @@ public class QuanCo : MonoBehaviour
                     PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y - 1);
                     PointMovePlate((int)this.transform.position.x + 2, (int)this.transform.position.y + 1);
                 }
-                if (controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x , (int)this.transform.position.y-1) == null)
+                if (controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x, (int)this.transform.position.y - 1) == null)
                 {
                     PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y - 2);
                     PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y - 2);
                 }
-                if (controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x , (int)this.transform.position.y+1) == null)
+                if (controller.GetComponent<Game>().CheckObjOnTitle((int)this.transform.position.x, (int)this.transform.position.y + 1) == null)
                 {
                     PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y + 2);
                     PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y + 2);
@@ -204,27 +204,24 @@ public class QuanCo : MonoBehaviour
             case "tot":
                 if (Team == 1) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
                 else PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y - 1);
-                if ((Team == 1 && transform.position.y >= 5)|| (Team == 2 && transform.position.y <= 4))
+                if ((Team == 1 && transform.position.y >= 5) || (Team == 2 && transform.position.y <= 4))
                 {
                     PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
                     PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
                 }
-                    break;
-            case "totsangxong":
-                if (Team == 1) PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y + 1);
-                else PointMovePlate((int)this.transform.position.x, (int)this.transform.position.y - 1);
-                PointMovePlate((int)this.transform.position.x + 1, (int)this.transform.position.y);
-                PointMovePlate((int)this.transform.position.x - 1, (int)this.transform.position.y);
                 break;
         }
     }
     public void LoadSkin()
     {
-        SpriteRenderer SpriteQuanCo=GetComponent<SpriteRenderer>();
+        SpriteRenderer SpriteQuanCo = GetComponent<SpriteRenderer>();
+        if (GlobalThings.GameRule == 1)
+            { TenQuanCo = TenThatCoUp; TenThatCoUp = null; }
+
         switch (TenQuanCo)
         {
             case "vua":
-                SpriteQuanCo.sprite= Resources.Load<Sprite>("Sprites/Game/Skin"+GlobalThings.SkinID+"/0Vua"+(Team==1?"Do":"Den"));
+                SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/0Vua" + (Team == 1 ? "Do" : "Den"));
                 break;
             case "si":
                 SpriteQuanCo.sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/1Si" + (Team == 1 ? "Do" : "Den"));

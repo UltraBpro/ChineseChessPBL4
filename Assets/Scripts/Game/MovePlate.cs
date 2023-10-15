@@ -10,7 +10,7 @@ public class MovePlate : MonoBehaviour
     private void Start()
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
-        if (attack) 
+        if (attack)
         {
             this.GetComponent<SpriteRenderer>().color = Color.red;
         }
@@ -22,7 +22,7 @@ public class MovePlate : MonoBehaviour
         controlScript.DestroyMovePlates();
         controlScript.NextTurn();
         string CMD = GameClient.instance.idDoiPhuong + "|MOVE|" + currentMovingObject.name + "|" + (int)this.transform.position.x + "|" + (int)this.transform.position.y;
-        if (GlobalThings.GameMode == 2 && controlScript.PlayingTeam!=controlScript.myTeam) GameClient.instance.GuiDenSV(System.Text.Encoding.UTF8.GetBytes(CMD));
+        if (GlobalThings.GameMode == 2 && controlScript.PlayingTeam != controlScript.myTeam) GameClient.instance.GuiDenSV(System.Text.Encoding.UTF8.GetBytes(CMD));
         //if (GlobalThings.GameRule == 1)
         //{
         //    QuanCo quancoDangDiChuyen=currentMovingObject.GetComponent<QuanCo>();

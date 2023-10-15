@@ -30,7 +30,7 @@ public class CursorController : MonoBehaviour
         {
             Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
         }
-        
+
     }
-    
+
 }

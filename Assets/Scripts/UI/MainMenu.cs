@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
     Animator anim;
 
@@ -23,7 +24,8 @@ public class MainMenu : MonoBehaviour {
     private AudioSource audioSource;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -50,7 +52,7 @@ public class MainMenu : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-       
+
     }
 
     public void openStartGameOptions()
@@ -67,7 +69,7 @@ public class MainMenu : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-        
+
     }
 
     public void openOptions_Game()
@@ -158,8 +160,8 @@ public class MainMenu : MonoBehaviour {
 
     public void newGame(int GameModeCreate)
     {
-            GlobalThings.GameMode = GameModeCreate;
-            SceneManager.LoadScene("ChineseChessGame");
+        GlobalThings.GameMode = GameModeCreate;
+        SceneManager.LoadScene("ChineseChessGame");
     }
     #endregion
 
@@ -171,7 +173,7 @@ public class MainMenu : MonoBehaviour {
         anim.Play("buttonTweenAnims_off");
 
         //disable BLUR
-       // Camera.main.GetComponent<Animator>().Play("BlurOff");
+        // Camera.main.GetComponent<Animator>().Play("BlurOff");
 
         //play click sfx
         playClickSound();
@@ -182,7 +184,7 @@ public class MainMenu : MonoBehaviour {
         //simply play anim for CLOSING main options panel
         SkinPanel.SetActive(false);
         anim.Play("OptTweenAnim_off");
-        
+
         //play click sfx
         playClickSound();
 
@@ -201,7 +203,7 @@ public class MainMenu : MonoBehaviour {
         audioSource.Play();
     }
 
-    public void playClickSound() 
+    public void playClickSound()
     {
         audioSource.clip = ClickSound;
         audioSource.Play();
