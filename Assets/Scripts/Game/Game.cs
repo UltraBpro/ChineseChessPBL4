@@ -483,7 +483,7 @@ public class Game : MonoBehaviour
                     bestMove = move;
                 }
             }
-            return (bestMove, minEval);
+            return (bestMove, minEval); 
         }
     }
     #endregion
