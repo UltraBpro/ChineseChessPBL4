@@ -101,9 +101,9 @@ public class Game : MonoBehaviour
     }
     public void NextTurn()
     {
-        if (GlobalThings.GameMode == 1) BotPlay();
-        else if (PlayingTeam == 2) PlayingTeam = 1;
+        if (PlayingTeam == 2) PlayingTeam = 1;
         else PlayingTeam++;
+        if (GlobalThings.GameMode == 1) BotPlay();
     }
     public GameObject CheckObjOnTitle(int cot, int hang)
     {
@@ -142,9 +142,11 @@ public class Game : MonoBehaviour
     #region BOT'S SHITSSSSSSSSS
     private void BotPlay()
     {
-        Move botmove = Minimax(1, true).Item1;
+        Move botmove = Minimax(2, true).Item1;
         DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
         Debug.Log("FINAL:  " + BoardEvaluation());
+        if (PlayingTeam == 2) PlayingTeam = 1;
+        else PlayingTeam++;
         //BOT PLAY, DUHHH
     }
 
@@ -191,7 +193,7 @@ public class Game : MonoBehaviour
                                 else score += scoretoadd;
                                 break;
                             case "phao":
-                                scoretoadd += 45 + GlobalThings.phaoEvalRed[i, chieudai];
+                                scoretoadd += 60 + GlobalThings.phaoEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
@@ -223,7 +225,7 @@ public class Game : MonoBehaviour
                 if (allTitle[i, j] != null)
                 {
                     QuanCo piece = allTitle[i, j].GetComponent<QuanCo>();
-                    if (piece != null && piece.Team != myTeam)
+                    if (piece != null && piece.Team == PlayingTeam)
                     {
                         // Add these moves to the list of all moves
                         allMoves.AddRange(GetPieceMoves(piece, i, j));
@@ -410,8 +412,12 @@ public class Game : MonoBehaviour
     ////TEMP MOVE
     //allTitle[oldx, oldy] = null;
     //            allTitle[targetx, targety] = move.movingObj;
+    //            if (PlayingTeam == 2) PlayingTeam = 1;
+    //            else PlayingTeam++;
     //            var currentEval = Minimax(depth - 1, false).Item2;
-    //allTitle[oldx, oldy] = move.movingObj;
+    //            if (PlayingTeam == 2) PlayingTeam = 1;
+    //            else PlayingTeam++;
+    //            allTitle[oldx, oldy] = move.movingObj;
     //            allTitle[targetx, targety] = tempcapture;
     public (Move, int) Minimax(int depth, bool maximizingPlayer)
     {
@@ -436,7 +442,11 @@ public class Game : MonoBehaviour
                 //TEMP MOVE
                 allTitle[oldx, oldy] = null;
                 allTitle[targetx, targety] = move.movingObj;
+                if (PlayingTeam == 2) PlayingTeam = 1;
+                else PlayingTeam++;
                 var currentEval = Minimax(depth - 1, false).Item2;
+                if (PlayingTeam == 2) PlayingTeam = 1;
+                else PlayingTeam++;
                 allTitle[oldx, oldy] = move.movingObj;
                 allTitle[targetx, targety] = tempcapture;
                 if (currentEval > maxEval)
@@ -460,9 +470,13 @@ public class Game : MonoBehaviour
                 //TEMP MOVE
                 allTitle[oldx, oldy] = null;
                 allTitle[targetx, targety] = move.movingObj;
+                if (PlayingTeam == 2) PlayingTeam = 1;
+                else PlayingTeam++;
                 var currentEval = Minimax(depth - 1, true).Item2;
                 allTitle[oldx, oldy] = move.movingObj;
                 allTitle[targetx, targety] = tempcapture;
+                if (PlayingTeam == 2) PlayingTeam = 1;
+                else PlayingTeam++;
                 if (currentEval < minEval)
                 {
                     minEval = currentEval;
