@@ -93,8 +93,7 @@ public class Game : MonoBehaviour
             //Update the matrix
             allTitle[(int)LastMove.oldPos.x, (int)LastMove.oldPos.y] = LastMove.movingObj;
             LastMove = LastMove.PreMove;
-            if (PlayingTeam == 2) PlayingTeam = 1;
-            else PlayingTeam++;
+            NextTurn();
             DestroyMovePlates();
         }
         else Debug.Log("Lạy hồn m đã di chuyển chi đâu? Đào bug à?");
@@ -103,7 +102,6 @@ public class Game : MonoBehaviour
     {
         if (PlayingTeam == 2) PlayingTeam = 1;
         else PlayingTeam++;
-        if (GlobalThings.GameMode == 1) BotPlay();
     }
     public GameObject CheckObjOnTitle(int cot, int hang)
     {
@@ -140,13 +138,12 @@ public class Game : MonoBehaviour
         }
     }
     #region BOT'S SHITSSSSSSSSS
-    private void BotPlay()
+    public void BotPlay()
     {
         Move botmove = Minimax(2, true).Item1;
         DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
         Debug.Log("FINAL:  " + BoardEvaluation());
-        if (PlayingTeam == 2) PlayingTeam = 1;
-        else PlayingTeam++;
+        NextTurn();
         //BOT PLAY, DUHHH
     }
 
@@ -442,11 +439,9 @@ public class Game : MonoBehaviour
                 //TEMP MOVE
                 allTitle[oldx, oldy] = null;
                 allTitle[targetx, targety] = move.movingObj;
-                if (PlayingTeam == 2) PlayingTeam = 1;
-                else PlayingTeam++;
+                NextTurn();
                 var currentEval = Minimax(depth - 1, false).Item2;
-                if (PlayingTeam == 2) PlayingTeam = 1;
-                else PlayingTeam++;
+                NextTurn();
                 allTitle[oldx, oldy] = move.movingObj;
                 allTitle[targetx, targety] = tempcapture;
                 if (currentEval > maxEval)
@@ -470,13 +465,11 @@ public class Game : MonoBehaviour
                 //TEMP MOVE
                 allTitle[oldx, oldy] = null;
                 allTitle[targetx, targety] = move.movingObj;
-                if (PlayingTeam == 2) PlayingTeam = 1;
-                else PlayingTeam++;
+                NextTurn();
                 var currentEval = Minimax(depth - 1, true).Item2;
                 allTitle[oldx, oldy] = move.movingObj;
                 allTitle[targetx, targety] = tempcapture;
-                if (PlayingTeam == 2) PlayingTeam = 1;
-                else PlayingTeam++;
+                NextTurn();
                 if (currentEval < minEval)
                 {
                     minEval = currentEval;
@@ -536,7 +529,7 @@ public class Move
 }
 public static class GlobalThings
 {
-    public static int GameMode = 1;
+    public static int GameMode = 0;
     public static int GameRule = 0;
     public static int SkinID = 0;
     #region valuePieces

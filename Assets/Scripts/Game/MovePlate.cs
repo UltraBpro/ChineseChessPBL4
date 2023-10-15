@@ -21,6 +21,7 @@ public class MovePlate : MonoBehaviour
         controlScript.DiChuyenQuan(currentMovingObject, (int)this.transform.position.x, (int)this.transform.position.y);
         controlScript.DestroyMovePlates();
         controlScript.NextTurn();
+        if (GlobalThings.GameMode == 1) controlScript.BotPlay();
         string CMD = GameClient.instance.idDoiPhuong + "|MOVE|" + currentMovingObject.name + "|" + (int)this.transform.position.x + "|" + (int)this.transform.position.y;
         if (GlobalThings.GameMode == 2 && controlScript.PlayingTeam != controlScript.myTeam) GameClient.instance.GuiDenSV(System.Text.Encoding.UTF8.GetBytes(CMD));
         //if (GlobalThings.GameRule == 1)
