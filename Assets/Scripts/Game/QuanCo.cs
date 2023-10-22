@@ -18,6 +18,7 @@ public class QuanCo : MonoBehaviour
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.volume = GlobalThings.SoundVolume;
         }
         controller = GameObject.FindGameObjectWithTag("GameController");
     }

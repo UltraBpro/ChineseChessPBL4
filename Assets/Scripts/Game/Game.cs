@@ -23,6 +23,8 @@ public class Game : MonoBehaviour
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.volume = GlobalThings.SoundVolume;
+            GameObject.FindGameObjectWithTag("MusicPlayer").GetComponent<AudioSource>().volume = GlobalThings.MusicVolume;
         }
         foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
         foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
@@ -546,6 +548,8 @@ public static class GlobalThings
     public static int GameMode = 0;
     public static int GameRule = 0;
     public static int SkinID = 0;
+    public static float MusicVolume = 1;
+    public static float SoundVolume = 1;
     #region valuePieces
     public static int[,] totEvalRed = new int[9, 10]
 {

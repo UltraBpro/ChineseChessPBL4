@@ -208,7 +208,15 @@ public class MainMenu : MonoBehaviour
         audioSource.clip = ClickSound;
         audioSource.Play();
     }
-
+    public void SaveMusic(float volume)
+    {
+        GlobalThings.MusicVolume = volume;
+    }
+    public void SaveSound(float volume)
+    {
+        GlobalThings.SoundVolume = volume;
+        audioSource.volume = volume;
+    }
 
     #endregion
 }
