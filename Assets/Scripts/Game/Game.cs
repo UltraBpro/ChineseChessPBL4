@@ -112,11 +112,11 @@ public class Game : MonoBehaviour
         {
             for (int j = 0; j < 10; j++)
             {
-                if(allTitle[i,j]!=null)
-                if (allTitle[i, j].tag == "VuaDen"|| allTitle[i, j].tag == "VuaDo")
-                {
-                    founded++;
-                }
+                if (allTitle[i, j] != null)
+                    if (allTitle[i, j].tag == "VuaDen" || allTitle[i, j].tag == "VuaDo")
+                    {
+                        founded++;
+                    }
             }
         }
         return founded != 2;
@@ -153,6 +153,28 @@ public class Game : MonoBehaviour
             P2[i].GetComponent<QuanCo>().TenThatCoUp = randomName;
             P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDen");
             names.RemoveAt(index);
+        }
+        if (GlobalThings.GameMode == 2)
+        {
+            List<string> temp = new List<string>();
+            for (int i = 0; i < P1.Count; i++) temp.Add(P1[i].GetComponent<QuanCo>().TenThatCoUp);
+            for (int i = 0; i < P2.Count; i++) temp.Add(P2[i].GetComponent<QuanCo>().TenThatCoUp);
+            CoUpTemp(temp);
+        }
+    }
+    public void LoadCoUpFromOnl(List<string> allname)
+    {
+        for (int i = 0; i < P1.Count; i++)
+        {
+            P1[i].GetComponent<QuanCo>().TenThatCoUp = allname[0];
+            allname.RemoveAt(0);
+            P1[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDo");
+        }
+        for (int i = 0; i < P2.Count; i++)
+        {
+            P2[i].GetComponent<QuanCo>().TenThatCoUp = allname[0];
+            allname.RemoveAt(0);
+            P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDen");
         }
     }
     #region BOT'S SHITSSSSSSSSS
@@ -492,7 +514,7 @@ public class Game : MonoBehaviour
                     bestMove = move;
                 }
             }
-            return (bestMove, minEval); 
+            return (bestMove, minEval);
         }
     }
     #endregion
@@ -515,10 +537,18 @@ public class Game : MonoBehaviour
             GameClient.instance.ConnectDenSV(GameObject.Find("TextBoxIPTEMP").GetComponent<InputField>().text, 1006);
         });
     }
+
     public void TEMP()
     {
         GlobalThings.GameMode = 2;
-        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
+        if(GlobalThings.GameRule==0)GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
+        else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
+    }
+    public void CoUpTemp(List<string> allname)
+    {
+        string allnameonboard = "";
+        foreach (string name in allname) allnameonboard += "|" + name;
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|LOADCOUP" + allnameonboard));
     }
     #endregion
 }

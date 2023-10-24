@@ -108,6 +108,15 @@ public class GameClient : MonoBehaviour
                         idDoiPhuong = System.Convert.ToInt32(info[2]);
                     });
                     break;
+                case "LOADCOUP":
+                    GlobalThings.GameRule = 1;//Se xoa sau;
+                    List<string> nametosave = new List<string>();
+                    for (int i = 1; i < info.Length; i++) { nametosave.Add(info[i]); }
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().LoadCoUpFromOnl(nametosave);
+                    });
+                    break;
                 case "MOVE":
                     ThreadManager.ExecuteOnMainThread(() =>
                     {

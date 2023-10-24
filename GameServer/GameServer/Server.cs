@@ -14,6 +14,7 @@ namespace GameServer
         public static int Port=1006;
         public static Dictionary<int, ClientInSV> DSClient = new Dictionary<int, ClientInSV>();
         public static Queue<int> MatchmakingQueue = new Queue<int>();
+        public static Queue<int> MatchmakingQueueCoUp = new Queue<int>();
         public static TcpListener ServerTcpListener;
         public static void Chay()
         {
@@ -45,6 +46,14 @@ namespace GameServer
             if (MatchmakingQueue.Count >= 2)
             {
                 TaoMatch(MatchmakingQueue.Dequeue(), MatchmakingQueue.Dequeue());
+            }
+        }
+        public static void AddToMMQueueCoUp(int idadd)
+        {
+            MatchmakingQueueCoUp.Enqueue(idadd);
+            if (MatchmakingQueueCoUp.Count >= 2)
+            {
+                TaoMatch(MatchmakingQueueCoUp.Dequeue(), MatchmakingQueueCoUp.Dequeue());
             }
         }
         public static void TaoMatch(int id1,int id2)

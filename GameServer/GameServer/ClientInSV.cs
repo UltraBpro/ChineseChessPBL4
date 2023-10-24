@@ -88,6 +88,9 @@ namespace GameServer
                         case "MATCHMAKING":
                             Server.AddToMMQueue(Convert.ToInt32(info[1]));
                             break;
+                        case "MATCHMAKINGCOUP":
+                            Server.AddToMMQueueCoUp(Convert.ToInt32(info[1]));
+                            break;
                     }
             }
             catch (Exception ex)
