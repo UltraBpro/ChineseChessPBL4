@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\UI\CursorController.cs" />
     <Compile Include="Assets\Scripts\Game\Game.cs" />
     <Compile Include="Assets\Scripts\Game\QuanCo.cs" />
+    <Compile Include="Assets\Scripts\UI\GraphicMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

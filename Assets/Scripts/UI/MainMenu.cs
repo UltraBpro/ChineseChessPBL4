@@ -32,8 +32,6 @@ public class MainMenu : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
         }
         anim = GetComponent<Animator>();
-        //new key
-        PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
     }
 
     #region Open Different panels
@@ -184,7 +182,6 @@ public class MainMenu : MonoBehaviour
         //simply play anim for CLOSING main options panel
         SkinPanel.SetActive(false);
         anim.Play("OptTweenAnim_off");
-
         //play click sfx
         playClickSound();
 
@@ -216,7 +213,7 @@ public class MainMenu : MonoBehaviour
     {
         GlobalThings.SoundVolume = volume;
         audioSource.volume = volume;
-    }
 
+    }
     #endregion
 }
