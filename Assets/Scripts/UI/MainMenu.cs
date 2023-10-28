@@ -164,7 +164,6 @@ public class MainMenu : MonoBehaviour
     #endregion
 
     #region Back Buttons
-
     public void back_options()
     {
         //simply play anim for CLOSING main options panel

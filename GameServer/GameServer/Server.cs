@@ -16,10 +16,10 @@ namespace GameServer
         public static Queue<int> MatchmakingQueue = new Queue<int>();
         public static Queue<int> MatchmakingQueueCoUp = new Queue<int>();
         public static TcpListener ServerTcpListener;
-        public static void Chay()
+        public static void Chay(string IPtoHost)
         {
             for (int i = 0; i < MaxConnections; i++) DSClient.Add(i, new ClientInSV(i));
-            ServerTcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), Port);
+            ServerTcpListener = new TcpListener(IPAddress.Parse(IPtoHost), Port);
             ServerTcpListener.Start();
             ServerTcpListener.BeginAcceptTcpClient(new AsyncCallback(NhanKetNoi), null);
             Console.WriteLine("Tao SV o Port: " + Port);
@@ -63,7 +63,7 @@ namespace GameServer
             DSClient[id1].GuiDenClient(data);
 
             // Gửi ID của client1 tới client2
-            data = Encoding.ASCII.GetBytes("MATCH|2|" + id1);
+            data = Encoding.UTF8.GetBytes("MATCH|2|" + id1);
             DSClient[id2].GuiDenClient(data);
         }
     }

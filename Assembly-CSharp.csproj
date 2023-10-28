@@ -58,13 +58,13 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Game\ThreadManager.cs" />
+    <Compile Include="Assets\Scripts\UI\GraphicMenu.cs" />
     <Compile Include="Assets\Scripts\Game\MovePlate.cs" />
     <Compile Include="Assets\Scripts\Database\NewBehaviourScript.cs" />
     <Compile Include="Assets\Scripts\Game\GameClient.cs" />
     <Compile Include="Assets\Scripts\UI\CursorController.cs" />
     <Compile Include="Assets\Scripts\Game\Game.cs" />
     <Compile Include="Assets\Scripts\Game\QuanCo.cs" />
-    <Compile Include="Assets\Scripts\UI\GraphicMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

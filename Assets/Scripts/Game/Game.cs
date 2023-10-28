@@ -577,21 +577,21 @@ public static class GlobalThings
 {
     public static int GameMode = 0;
     public static int GameRule = 0;
-    public static int SkinID = 0;
+    public static int SkinID = 2;
     public static float MusicVolume = 1;
     public static float SoundVolume = 1;
     #region valuePieces
     public static int[,] totEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 1, 6, 7, 8, 10, 10},
-    {0, 0, 0, 0, 2, 8, 9, 10, 10, 10},
-    {0, 0, 0, 0, 3, 9, 10, 11, 11, 10},
-    {0, 0, 0, 0, 4, 10, 11, 15, 15, 10},
-    {0 ,0 ,0 ,0 ,4 ,10 ,11 ,15 ,20 ,10},
-    {0 ,0 ,0 ,0 ,4 ,10 ,11 ,15 ,15 ,10},
-    {0 ,0 ,0 ,0 ,3 ,9 ,10 ,11 ,11 ,10},
-    {0 ,0 ,0 ,0 ,2 ,8 ,9 ,10 ,10 ,10},
-    {0 ,0 ,0 ,0 ,1 ,6 ,7 ,8 ,10 ,10}
+    {0, 0, 0, 0, 1, 6, 7, 8, 10, 0},
+    {0, 0, 0, 0, 2, 8, 9, 10, 10, 3},
+    {0, 0, 0, 0, 3, 9, 10, 11, 11, 6},
+    {0, 0, 0, 0, 4, 10, 11, 15, 15, 9},
+    {0 ,0 ,0 ,0 ,4 ,10 ,11 ,15 ,20 ,12},
+    {0 ,0 ,0 ,0 ,4 ,10 ,11 ,15 ,15 ,9},
+    {0 ,0 ,0 ,0 ,3 ,9 ,10 ,11 ,11 ,6},
+    {0 ,0 ,0 ,0 ,2 ,8 ,9 ,10 ,10 ,3},
+    {0 ,0 ,0 ,0 ,1 ,6 ,7 ,8 ,10 ,0}
 };
     public static int[,] phaoEvalRed = new int[9, 10]
 {

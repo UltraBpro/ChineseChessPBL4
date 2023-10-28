@@ -10,7 +10,7 @@ namespace GameServer
     {
         static void Main(string[] args)
         {
-            Server.Chay();
+            Server.Chay(Console.ReadLine());
             while(true)if(Console.ReadKey().Key==ConsoleKey.C)Console.Clear();
         }
     }
