@@ -203,43 +203,38 @@ public class Game : MonoBehaviour
                         switch (piece.TenQuanCo)
                         {
                             case "tot":
-                                if ((piece.Team == 1 && j <= 4) || (piece.Team == 2 && j >= 5))
-                                {
-                                    scoretoadd += 10;
-                                }
-                                else
-                                    scoretoadd += 20;
+                                scoretoadd += 30;
                                 scoretoadd += GlobalThings.totEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
                             case "si":
-                                scoretoadd += 20 + GlobalThings.siEvalRed[i, chieudai];
+                                scoretoadd += 120 + GlobalThings.siEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
                             case "tuong":
-                                scoretoadd += 20 + GlobalThings.tuongEvalRed[i, chieudai];
+                                scoretoadd += 120 + GlobalThings.tuongEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
                             case "ma":
-                                scoretoadd += 40 + GlobalThings.maEvalRed[i, chieudai];
+                                scoretoadd += 270 + GlobalThings.maEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
                             case "phao":
-                                scoretoadd += 60 + GlobalThings.phaoEvalRed[i, chieudai];
+                                scoretoadd += 285 + GlobalThings.phaoEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
                             case "xe":
-                                scoretoadd += 90 + GlobalThings.xeEvalRed[i, chieudai];
+                                scoretoadd += 600 + GlobalThings.xeEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
                             case "vua":
-                                scoretoadd += 90000 + GlobalThings.vuaEvalRed[i, chieudai];
+                                scoretoadd += 6000 + GlobalThings.vuaEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
@@ -524,9 +519,9 @@ public class Game : MonoBehaviour
     {
         ThreadManager.ExecuteOnMainThread(() =>
         {
-            string content="";
+            string content = "";
             if (GameClient.instance.CurrentAccount != null) content += GameClient.instance.CurrentAccount.username + ": ";
-            content+= GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
+            content += GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
             GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text = "";
             GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
             GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + content;
@@ -543,7 +538,7 @@ public class Game : MonoBehaviour
     public void TEMP()
     {
         GlobalThings.GameMode = 2;
-        if(GlobalThings.GameRule==0)GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
+        if (GlobalThings.GameRule == 0) GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
         else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
     }
     public void CoUpTemp(List<string> allname)
@@ -585,51 +580,52 @@ public static class GlobalThings
     #region valuePieces
     public static int[,] totEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 1, 6, 7, 8, 10, 0},
-    {0, 0, 0, 0, 2, 8, 9, 10, 10, 3},
-    {0, 0, 0, 0, 3, 9, 10, 11, 11, 6},
-    {0, 0, 0, 0, 4, 10, 11, 15, 15, 9},
-    {0 ,0 ,0 ,0 ,4 ,10 ,11 ,15 ,20 ,12},
-    {0 ,0 ,0 ,0 ,4 ,10 ,11 ,15 ,15 ,9},
-    {0 ,0 ,0 ,0 ,3 ,9 ,10 ,11 ,11 ,6},
-    {0 ,0 ,0 ,0 ,2 ,8 ,9 ,10 ,10 ,3},
-    {0 ,0 ,0 ,0 ,1 ,6 ,7 ,8 ,10 ,0}
+    {0, 0, 0, 0, 2, 6, 10, 14, 18, 0},
+    {0, 0, 0, 0, 0, 12, 20, 26, 36, 3},
+    {0, 0, 0, -2, 8, 18, 30, 42, 56, 6},
+    {0, 0, 0, 0, 0, 18, 34, 60, 80, 9},
+    {0 ,0 ,0 ,4 ,8 ,20 ,40 ,80 ,120 ,12},
+    {0 ,0 ,0 ,0 ,0 ,18 ,34 ,60 ,80 ,9},
+    {0 ,0 ,0 ,-2 ,8 ,18 ,30 ,42 ,56 ,6},
+    {0 ,0 ,0 ,0 ,0 ,12 ,20 ,26 ,36 ,3},
+    {0 ,0 ,0 ,0 ,2 ,6 ,10 ,14,18 ,0}
 };
     public static int[,] phaoEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    { 0, 0, 4, 0, -2, 0, 0, 2, 2, 6 },
+    { 0, 2, 0, 0, 0, 0, 0, 2, 2, 4 },
+    { 2, 4, 8, 0, 4, 0, -2, 0, 0, 0 },
+    { 6, 6, 6, 2, 2, 2, 4, -10, -4, -10 },
+    { 6, 6, 10, 4, 6, 8, 10, -8, -14, -12 },
+    { 6, 6, 6, 2, 2, 2, 4, -10, -4, -10 },
+    { 2, 4, 8, 0, 4, 0, -2, 0, 0, 0 },
+    { 0, 2, 0, 0, 0, 0, 0, 2, 2, 4 },
+    { 0, 0, 4, 0, -2, 0, 0, 2, 2, 6 }
+
 };
     public static int[,] xeEvalRed = new int[9, 10]
 {
-    {-2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {-2, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    { -2, 8, 4, 6, 12,12 , 12, 12, 16, 14 },
+    { 10, 4, 8, 10, 16, 14, 18,12, 20, 14 },
+    { 6, 8, 6, 8, 14, 12, 16,12, 18, 12 },
+    { 14, 16, 14, 14, 20, 18, 22,18, 24, 18 },
+    { 12, 8, 12, 14, 20, 18, 22,18, 26, 16 },
+    { 14, 16, 14, 14, 20, 18, 22,18, 24, 18 },
+   { 6, 8, 6, 8, 14, 12, 16,12, 18, 12 },
+    { 10, 4, 8, 10, 16, 14, 18,12, 20, 14 },
+    { -2, 8, 4, 6, 12,12 , 12, 12, 16, 14 }
 };
     public static int[,] maEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {-2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {-2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    { 0,   0,   4,   2,   4,   6,   8,  12,   4,   4},
+    {-4,   2,   2,   6,  12,  16,  24,  14,   10,   8},
+    {0 ,4 ,8 ,8 ,16 ,14 ,18 ,16 ,28 ,16 },
+    {0 ,4 ,8 ,6 ,14 ,18 ,24 ,20 ,16 ,12 },
+    {0 , -2 ,4 ,10 ,12 ,16 ,20 ,18 ,8 ,4 },
+    {0 ,4 ,8 ,6 ,14 ,18 ,24 ,20 ,16 ,12 },
+    {0 ,4 ,8 ,8 ,16 ,14 ,18 ,16 ,28 ,16 },
+    {-4,   2,   2,   6,  12,  16,  24,  14,   10,   8},
+    { 0,   0,   4,   2,   4,   6,   8,  12,   4,   4}
 };
     public static int[,] tuongEvalRed = new int[9, 10]
 {
@@ -637,7 +633,7 @@ public static class GlobalThings
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -649,7 +645,7 @@ public static class GlobalThings
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -661,7 +657,7 @@ public static class GlobalThings
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {2, 2, 2, 0, 0, 0, 0, 0, 0, 0},
+    {4, 2, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
