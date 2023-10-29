@@ -5,3 +5,8 @@ D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.cs
 D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.csproj.CoreCompileInputs.cache
 D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.exe
 D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.pdb
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\EntityFramework.dll
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\EntityFramework.SqlServer.dll
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\EntityFramework.xml
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\bin\Debug\EntityFramework.SqlServer.xml
+D:\Projects\Unity\ChineseChessPBL4\GameServer\GameServer\obj\Debug\GameServer.csproj.CopyComplete

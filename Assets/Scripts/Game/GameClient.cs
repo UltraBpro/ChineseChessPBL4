@@ -17,6 +17,7 @@ public class GameClient : MonoBehaviour
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
+    public player CurrentAccount=null;
     public void Awake()
     {
         if (instance == null) instance = this;
@@ -97,6 +98,10 @@ public class GameClient : MonoBehaviour
                 case "HELLO":
                     idDuocCap = System.Convert.ToInt32(info[1]);
                     break;
+                case "LOGIN":
+                    CurrentAccount = new player { id = int.Parse(info[1]), username = info[2], score = int.Parse(info[3]) };
+                    Debug.Log("Da co account");
+                        break;
                 case "CHAT":
                     ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + info[1]);
                     break;

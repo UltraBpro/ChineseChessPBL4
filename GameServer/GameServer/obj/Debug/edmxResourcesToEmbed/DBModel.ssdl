@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PBL4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="player">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="64" Nullable="false" />
+    <Property Name="password" Type="char" MaxLength="64" Nullable="false" />
+    <Property Name="salt" Type="char" MaxLength="64" Nullable="false" />
+    <Property Name="score" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="PBL4ModelStoreContainer">
+    <EntitySet Name="player" EntityType="Self.player" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

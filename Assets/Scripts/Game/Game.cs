@@ -524,7 +524,9 @@ public class Game : MonoBehaviour
     {
         ThreadManager.ExecuteOnMainThread(() =>
         {
-            string content = GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
+            string content="";
+            if (GameClient.instance.CurrentAccount != null) content += GameClient.instance.CurrentAccount.username + ": ";
+            content+= GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
             GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text = "";
             GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
             GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + content;
