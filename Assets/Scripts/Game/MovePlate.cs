@@ -7,37 +7,31 @@ public class MovePlate : MonoBehaviour
     public GameObject controller;
     public GameObject currentMovingObject = null;
     public bool attack = false;
-    public int hang, cot;
-    public AudioClip MoveSound,EatSound;
-    private AudioSource audioSource;
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
         controller = GameObject.FindGameObjectWithTag("GameController");
-        if (attack) 
+        if (attack)
         {
             this.GetComponent<SpriteRenderer>().color = Color.red;
-            audioSource.clip = EatSound;
         }
-        else audioSource.clip = MoveSound;
     }
     public void OnMouseDown()
     {
-        audioSource.Play();
         Game controlScript = controller.GetComponent<Game>();
-        controlScript.DiChuyenQuan(currentMovingObject, (int)this.transform.position.x, (int)this.transform.position.y, attack);
-        controlScript.RemoveMovePlates();
-        //Destroy the move plates including self after the sound has played
-        StartCoroutine(WaitAndDestroy(audioSource.clip.length, controlScript));
-        controlScript.NextTurn();
-    }
-    IEnumerator WaitAndDestroy(float waitTime,Game controlScript)
-    {
-        yield return new WaitForSeconds(waitTime); // Chờ cho đến khi clip âm thanh kết thúc
+        controlScript.DiChuyenQuan(currentMovingObject, (int)this.transform.position.x, (int)this.transform.position.y);
         controlScript.DestroyMovePlates();
+        controlScript.NextTurn();
+        if (GlobalThings.GameMode == 1) controlScript.BotPlay();
+        string CMD = GameClient.instance.idDoiPhuong + "|MOVE|" + currentMovingObject.name + "|" + (int)this.transform.position.x + "|" + (int)this.transform.position.y;
+        if (GlobalThings.GameMode == 2 && controlScript.PlayingTeam != controlScript.myTeam) GameClient.instance.GuiDenSV(System.Text.Encoding.UTF8.GetBytes(CMD));
+        //if (GlobalThings.GameRule == 1)
+        //{
+        //    QuanCo quancoDangDiChuyen=currentMovingObject.GetComponent<QuanCo>();
+        //    if (quancoDangDiChuyen.TenThatCoUp != null)
+        //    {
+        //        quancoDangDiChuyen.TenQuanCo = quancoDangDiChuyen.TenThatCoUp;
+        //        quancoDangDiChuyen.TenThatCoUp = null;
+        //    }
+        //}
     }
 }

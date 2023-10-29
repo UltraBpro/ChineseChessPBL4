@@ -9,25 +9,23 @@ using UnityEngine.UI;
 
 public class GameClient : MonoBehaviour
 {
-    public static GameClient instance;
+    public static GameClient instance { get; private set; }
     public static int BufferSize = 4096;
-    string IP;int Port;
-    private int idDuocCap;
+    string IP; int Port;
+    public int idDuocCap;
+    public int idDoiPhuong;
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
+    public player CurrentAccount=null;
     public void Awake()
     {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(this);
     }
-    private void Start()
+    public void ConnectDenSV(string IPkn, int Portkn)
     {
-        
-    }
-    public void ConnectDenSV(string IPkn,int Portkn)
-    {
-        instance.IP = IPkn;instance.Port = Portkn;
+        instance.IP = IPkn; instance.Port = Portkn;
         ketnoiTCPdenSV = new TcpClient
         {
             ReceiveBufferSize = BufferSize,
@@ -56,7 +54,6 @@ public class GameClient : MonoBehaviour
                 byte[] data = new byte[dodaidaybyte];
                 Array.Copy(buffer, data, dodaidaybyte);
                 //Xử lý thông tin nhận được
-                ThreadManager.ExecuteOnMainThread(() => { GameObject.Find("TextFieldFromSV").GetComponent<Text>().text += Encoding.UTF8.GetString(data) + "\n"; });
                 ReactToServer(Encoding.UTF8.GetString(data));
                 stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
             }
@@ -72,9 +69,9 @@ public class GameClient : MonoBehaviour
         {
             stream.BeginWrite(data, 0, data.Length, new AsyncCallback(DaGuiXongRoi), stream);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            Debug.Log("Có lỗi xảy ra khi gửi đến server: "+e.Message);
+            Debug.Log("Có lỗi xảy ra khi gửi đến server: " + e.Message);
         }
     }
     public void DaGuiXongRoi(IAsyncResult ketquagui)
@@ -98,19 +95,47 @@ public class GameClient : MonoBehaviour
             // Kiểm tra nếu info1 là "hello"
             switch (info[0])
             {
-                case "Hello":
+                case "HELLO":
                     idDuocCap = System.Convert.ToInt32(info[1]);
-                    Debug.Log("ID của tôi là: " + idDuocCap);
                     break;
-                case "Chat":
+                case "LOGIN":
+                    CurrentAccount = new player { id = int.Parse(info[1]), username = info[2], score = int.Parse(info[3]) };
+                    Debug.Log("Da co account");
+                        break;
+                case "CHAT":
+                    ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + info[1]);
+                    break;
+                case "MATCH":
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+                        controllerscript.myTeam = System.Convert.ToInt32(info[1]);
+                        idDoiPhuong = System.Convert.ToInt32(info[2]);
+                    });
+                    break;
+                case "LOADCOUP":
+                    GlobalThings.GameRule = 1;//Se xoa sau;
+                    List<string> nametosave = new List<string>();
+                    for (int i = 1; i < info.Length; i++) { nametosave.Add(info[i]); }
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().LoadCoUpFromOnl(nametosave);
+                    });
+                    break;
+                case "MOVE":
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+                        controllerscript.DiChuyenQuan(GameObject.Find(info[1]), System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]));
+                        controllerscript.NextTurn();
 
-                    break;
-                case "Move":
-                    //GameObject mp = Instantiate(movePlate, new Vector3(cotMovePl, hangMovePl, 0), Quaternion.identity);
-                    //MovePlate mpScript = mp.GetComponent<MovePlate>();
-                    //if (attack) mpScript.attack = true;
-                    //mpScript.currentMovingObject = gameObject;
-                    //mp.SendMessage("OnMouseDown");
+                        //GameObject movingobj=GameObject.Find(info[1]);
+                        //GameObject mp = Instantiate(movingobj.GetComponent<QuanCo>().movePlate, new Vector3(System.Convert.ToInt32(info[2]), System.Convert.ToInt32(info[3]), 0), Quaternion.identity);
+                        //MovePlate mpScript = mp.GetComponent<MovePlate>();
+                        //if (System.Convert.ToBoolean(info[4])) mpScript.attack = true;
+                        //mpScript.currentMovingObject = movingobj.gameObject;
+                        //mp.SendMessage("OnMouseDown");
+                    });
                     break;
             }
             // Thêm các trường hợp xử lý khác tại đây dựa trên giá trị của info1, info2, v.v...

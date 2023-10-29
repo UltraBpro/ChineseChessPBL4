@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
     Animator anim;
 
-    public string newGameSceneName;
     public int quickSaveSlotID;
 
     [Header("Options Panel")]
@@ -16,14 +16,22 @@ public class MainMenu : MonoBehaviour {
     public GameObject GamePanel;
     public GameObject ControlsPanel;
     public GameObject GfxPanel;
-    public GameObject LoadGamePanel;
+    public GameObject LoginPanel;
+    public GameObject SkinPanel;
+
+    public AudioClip ClickSound;
+    public AudioClip HoverSound;
+    private AudioSource audioSource;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
         anim = GetComponent<Animator>();
-
-        //new key
-        PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
     }
 
     #region Open Different panels
@@ -42,7 +50,7 @@ public class MainMenu : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-       
+
     }
 
     public void openStartGameOptions()
@@ -59,7 +67,7 @@ public class MainMenu : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-        
+
     }
 
     public void openOptions_Game()
@@ -68,7 +76,8 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(true);
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(false);
+        LoginPanel.SetActive(false);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -83,7 +92,8 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(false);
         ControlsPanel.SetActive(true);
         GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(false);
+        LoginPanel.SetActive(false);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -98,7 +108,8 @@ public class MainMenu : MonoBehaviour {
         GamePanel.SetActive(false);
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(true);
-        LoadGamePanel.SetActive(false);
+        LoginPanel.SetActive(false);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -108,13 +119,14 @@ public class MainMenu : MonoBehaviour {
 
     }
 
-    public void openContinue_Load()
+    public void openLoginPanel()
     {
         //enable respective panel
         GamePanel.SetActive(false);
         ControlsPanel.SetActive(false);
         GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(true);
+        LoginPanel.SetActive(true);
+        SkinPanel.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -123,26 +135,42 @@ public class MainMenu : MonoBehaviour {
         playClickSound();
 
     }
-
-    public void newGame()
+    public void openSkinPanel()
     {
-        if (!string.IsNullOrEmpty(newGameSceneName))
-            SceneManager.LoadScene(newGameSceneName);
-        else
-            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
-                "add that scene in the Build Settings!");
+        //enable respective panel
+        GamePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
+        GfxPanel.SetActive(false);
+        LoginPanel.SetActive(false);
+        SkinPanel.SetActive(true);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+    public void SkinSelected(int skinid)
+    {
+        GlobalThings.SkinID = skinid;
+    }
+
+    public void newGame(int GameModeCreate)
+    {
+        GlobalThings.GameMode = GameModeCreate;
+        SceneManager.LoadScene("ChineseChessGame");
     }
     #endregion
 
     #region Back Buttons
-
     public void back_options()
     {
         //simply play anim for CLOSING main options panel
         anim.Play("buttonTweenAnims_off");
 
         //disable BLUR
-       // Camera.main.GetComponent<Animator>().Play("BlurOff");
+        // Camera.main.GetComponent<Animator>().Play("BlurOff");
 
         //play click sfx
         playClickSound();
@@ -151,8 +179,8 @@ public class MainMenu : MonoBehaviour {
     public void back_options_panels()
     {
         //simply play anim for CLOSING main options panel
+        SkinPanel.SetActive(false);
         anim.Play("OptTweenAnim_off");
-        
         //play click sfx
         playClickSound();
 
@@ -167,13 +195,25 @@ public class MainMenu : MonoBehaviour {
     #region Sounds
     public void playHoverClip()
     {
-       
+        audioSource.clip = HoverSound;
+        audioSource.Play();
     }
 
-    void playClickSound() {
+    public void playClickSound()
+    {
+        audioSource.clip = ClickSound;
+        audioSource.Play();
+    }
+    public void SaveMusic(float volume)
+    {
+        GlobalThings.MusicVolume = volume;
+    }
+    public void SaveSound(float volume)
+    {
+        GlobalThings.SoundVolume = volume;
+        audioSource.volume = volume;
 
     }
-
-
     #endregion
+
 }
