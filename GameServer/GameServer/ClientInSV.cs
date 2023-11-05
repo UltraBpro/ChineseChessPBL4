@@ -147,8 +147,6 @@ namespace GameServer
                 {
                     sb.Append(hashBytes[i].ToString("X2"));
                 }
-                Console.WriteLine(hashtoverify);
-                Console.WriteLine(sb.ToString());
                 return hashtoverify.Trim() == sb.ToString();
             }
         }

@@ -15,7 +15,7 @@ public class Game : MonoBehaviour
     public AudioClip MoveSound, EatSound;
     public Move LastMove;
     private AudioSource audioSource;
-    private float P1Jail = 0, P2Jail = 0;
+    private int P1Jail = 0, P2Jail = 0;
     // Start is called before the first frame update
     private void Start()
     {
@@ -180,9 +180,13 @@ public class Game : MonoBehaviour
     #region BOT'S SHITSSSSSSSSS
     public void BotPlay()
     {
-        Move botmove = Minimax(2, true).Item1;
-        DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
-        NextTurn();
+        Move botmove = Minimax(4, true, int.MinValue, int.MaxValue).Item1;
+        if (botmove != null)
+        {
+            DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
+            NextTurn();
+        }
+        else Debug.Log("Bot thua rôi");
         //BOT PLAY, DUHHH
     }
 
@@ -224,7 +228,7 @@ public class Game : MonoBehaviour
                                 else score += scoretoadd;
                                 break;
                             case "phao":
-                                scoretoadd += 285 + GlobalThings.phaoEvalRed[i, chieudai];
+                                scoretoadd += 300 + GlobalThings.phaoEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
@@ -234,7 +238,7 @@ public class Game : MonoBehaviour
                                 else score += scoretoadd;
                                 break;
                             case "vua":
-                                scoretoadd += 6000 + GlobalThings.vuaEvalRed[i, chieudai];
+                                scoretoadd += 60000 + GlobalThings.vuaEvalRed[i, chieudai];
                                 if (piece.Team == myTeam) score -= scoretoadd;
                                 else score += scoretoadd;
                                 break;
@@ -434,22 +438,22 @@ public class Game : MonoBehaviour
         }
         return MovesChoQuanNay;
     }
-    //int targetx = (int)move.targetPos.x;
-    //int targety = (int)move.targetPos.y;
-    //int oldx = (int)move.oldPos.x;
-    //int oldy = (int)move.oldPos.y;
-    //GameObject tempcapture = allTitle[targetx, targety];
-    ////TEMP MOVE
-    //allTitle[oldx, oldy] = null;
-    //            allTitle[targetx, targety] = move.movingObj;
-    //            if (PlayingTeam == 2) PlayingTeam = 1;
-    //            else PlayingTeam++;
-    //            var currentEval = Minimax(depth - 1, false).Item2;
-    //            if (PlayingTeam == 2) PlayingTeam = 1;
-    //            else PlayingTeam++;
-    //            allTitle[oldx, oldy] = move.movingObj;
-    //            allTitle[targetx, targety] = tempcapture;
-    public (Move, int) Minimax(int depth, bool maximizingPlayer)
+    /*
+                    int targetx = (int)move.targetPos.x;
+                    int targety = (int)move.targetPos.y;
+                    int oldx = (int)move.oldPos.x;
+                    int oldy = (int)move.oldPos.y;
+                    GameObject tempcapture = allTitle[targetx, targety];
+                    //TEMP MOVE
+                    allTitle[oldx, oldy] = null;
+                    allTitle[targetx, targety] = move.movingObj;
+                    NextTurn();
+    */
+    /*                  
+                        allTitle[oldx, oldy] = move.movingObj;
+                        allTitle[targetx, targety] = tempcapture;
+    */
+    public (Move, int) Minimax(int depth, bool maximizingPlayer, int alpha, int beta)
     {
         if (depth == 0 || CheckEndGame())
         {
@@ -473,14 +477,19 @@ public class Game : MonoBehaviour
                 allTitle[oldx, oldy] = null;
                 allTitle[targetx, targety] = move.movingObj;
                 NextTurn();
-                var currentEval = Minimax(depth - 1, false).Item2;
-                NextTurn();
+                var currentEval = Minimax(depth - 1, false, alpha, beta).Item2;
                 allTitle[oldx, oldy] = move.movingObj;
                 allTitle[targetx, targety] = tempcapture;
+                NextTurn();
                 if (currentEval > maxEval)
                 {
                     maxEval = currentEval;
                     bestMove = move;
+                }
+                alpha = Math.Max(alpha, currentEval);
+                if (beta <= alpha)
+                {
+                    break;
                 }
             }
             return (bestMove, maxEval);
@@ -499,7 +508,7 @@ public class Game : MonoBehaviour
                 allTitle[oldx, oldy] = null;
                 allTitle[targetx, targety] = move.movingObj;
                 NextTurn();
-                var currentEval = Minimax(depth - 1, true).Item2;
+                var currentEval = Minimax(depth - 1, true, alpha, beta).Item2;
                 allTitle[oldx, oldy] = move.movingObj;
                 allTitle[targetx, targety] = tempcapture;
                 NextTurn();
@@ -508,160 +517,166 @@ public class Game : MonoBehaviour
                     minEval = currentEval;
                     bestMove = move;
                 }
+                beta = Math.Min(beta, currentEval);
+                if (beta <= alpha)
+                {
+                    break;
+                }
             }
             return (bestMove, minEval);
         }
     }
+
     #endregion
     #region SE XOA SAU
     //TEMP SE XOA SAU
     public void Chat()
+{
+    ThreadManager.ExecuteOnMainThread(() =>
     {
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
-            string content = "";
-            if (GameClient.instance.CurrentAccount != null) content += GameClient.instance.CurrentAccount.username + ": ";
-            content += GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
-            GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text = "";
-            GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
-            GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + content;
-        });
-    }
-    public void ConnectDenSV()
+        string content = "";
+        if (GameClient.instance.CurrentAccount != null) content += GameClient.instance.CurrentAccount.username + ": ";
+        content += GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
+        GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text = "";
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
+        GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + content;
+    });
+}
+public void ConnectDenSV()
+{
+    ThreadManager.ExecuteOnMainThread(() =>
     {
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
-            GameClient.instance.ConnectDenSV(GameObject.Find("TextBoxIPTEMP").GetComponent<InputField>().text, 1006);
-        });
-    }
+        GameClient.instance.ConnectDenSV(GameObject.Find("TextBoxIPTEMP").GetComponent<InputField>().text, 1006);
+    });
+}
 
-    public void TEMP()
-    {
-        GlobalThings.GameMode = 2;
-        if (GlobalThings.GameRule == 0) GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
-        else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
-    }
-    public void CoUpTemp(List<string> allname)
-    {
-        string allnameonboard = "";
-        foreach (string name in allname) allnameonboard += "|" + name;
-        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|LOADCOUP" + allnameonboard));
-    }
-    #endregion
+public void TEMP()
+{
+    GlobalThings.GameMode = 2;
+    if (GlobalThings.GameRule == 0) GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
+    else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
+}
+public void CoUpTemp(List<string> allname)
+{
+    string allnameonboard = "";
+    foreach (string name in allname) allnameonboard += "|" + name;
+    GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|LOADCOUP" + allnameonboard));
+}
+#endregion
 }
 public class Move
 {
-    public Vector3 oldPos;
-    public GameObject movingObj;
-    public Vector3 targetPos;
-    public GameObject capturedObj = null;
-    public Move PreMove = null;
-    //For AI
-    public int evaluation;
-    public Move()
-    {
+public Vector3 oldPos;
+public GameObject movingObj;
+public Vector3 targetPos;
+public GameObject capturedObj = null;
+public Move PreMove = null;
+//For AI
+public int evaluation;
+public Move()
+{
 
-    }
-    public Move(GameObject moving, int xTruyen, int yTruyen, int x, int y)
-    {
-        oldPos = new Vector3((int)xTruyen, (int)yTruyen, 0);
-        targetPos = new Vector3((int)x, (int)y, 0);
-        movingObj = moving;
-        capturedObj = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().CheckObjOnTitle(x, y);
-    }
+}
+public Move(GameObject moving, int xTruyen, int yTruyen, int x, int y)
+{
+    oldPos = new Vector3((int)xTruyen, (int)yTruyen, 0);
+    targetPos = new Vector3((int)x, (int)y, 0);
+    movingObj = moving;
+    capturedObj = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().CheckObjOnTitle(x, y);
+}
 }
 public static class GlobalThings
 {
-    public static int GameMode = 0;
-    public static int GameRule = 0;
-    public static int SkinID = 2;
-    public static float MusicVolume = 1;
-    public static float SoundVolume = 1;
-    #region valuePieces
-    public static int[,] totEvalRed = new int[9, 10]
+public static int GameMode = 0;
+public static int GameRule = 0;
+public static int SkinID = 2;
+public static float MusicVolume = 1;
+public static float SoundVolume = 1;
+#region valuePieces
+public static int[,] totEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 2, 6, 10, 14, 18, 0},
-    {0, 0, 0, 0, 0, 12, 20, 26, 36, 3},
-    {0, 0, 0, -2, 8, 18, 30, 42, 56, 6},
-    {0, 0, 0, 0, 0, 18, 34, 60, 80, 9},
-    {0 ,0 ,0 ,4 ,8 ,20 ,40 ,80 ,120 ,12},
-    {0 ,0 ,0 ,0 ,0 ,18 ,34 ,60 ,80 ,9},
-    {0 ,0 ,0 ,-2 ,8 ,18 ,30 ,42 ,56 ,6},
-    {0 ,0 ,0 ,0 ,0 ,12 ,20 ,26 ,36 ,3},
-    {0 ,0 ,0 ,0 ,2 ,6 ,10 ,14,18 ,0}
+{0, 0, 0, 0, 2, 6, 10, 14, 18, 0},
+{0, 0, 0, 0, 0, 12, 20, 26, 36, 3},
+{0, 0, 0, -2, 8, 18, 30, 42, 56, 6},
+{0, 0, 0, 0, 0, 18, 34, 60, 80, 9},
+{0 ,0 ,0 ,4 ,8 ,20 ,40 ,80 ,120 ,12},
+{0 ,0 ,0 ,0 ,0 ,18 ,34 ,60 ,80 ,9},
+{0 ,0 ,0 ,-2 ,8 ,18 ,30 ,42 ,56 ,6},
+{0 ,0 ,0 ,0 ,0 ,12 ,20 ,26 ,36 ,3},
+{0 ,0 ,0 ,0 ,2 ,6 ,10 ,14,18 ,0}
 };
-    public static int[,] phaoEvalRed = new int[9, 10]
+public static int[,] phaoEvalRed = new int[9, 10]
 {
-    { 0, 0, 4, 0, -2, 0, 0, 2, 2, 6 },
-    { 0, 2, 0, 0, 0, 0, 0, 2, 2, 4 },
-    { 2, 4, 8, 0, 4, 0, -2, 0, 0, 0 },
-    { 6, 6, 6, 2, 2, 2, 4, -10, -4, -10 },
-    { 6, 6, 10, 4, 6, 8, 10, -8, -14, -12 },
-    { 6, 6, 6, 2, 2, 2, 4, -10, -4, -10 },
-    { 2, 4, 8, 0, 4, 0, -2, 0, 0, 0 },
-    { 0, 2, 0, 0, 0, 0, 0, 2, 2, 4 },
-    { 0, 0, 4, 0, -2, 0, 0, 2, 2, 6 }
+{ 0, 0, 4, 0, -2, 0, 0, 2, 2, 6 },
+{ 0, 2, 0, 0, 0, 0, 0, 2, 2, 4 },
+{ 2, 4, 8, 0, 4, 0, -2, 0, 0, 0 },
+{ 6, 6, 6, 2, 2, 2, 4, -10, -4, -10 },
+{ 6, 6, 10, 4, 6, 8, 10, -8, -14, -12 },
+{ 6, 6, 6, 2, 2, 2, 4, -10, -4, -10 },
+{ 2, 4, 8, 0, 4, 0, -2, 0, 0, 0 },
+{ 0, 2, 0, 0, 0, 0, 0, 2, 2, 4 },
+{ 0, 0, 4, 0, -2, 0, 0, 2, 2, 6 }
 
 };
-    public static int[,] xeEvalRed = new int[9, 10]
+public static int[,] xeEvalRed = new int[9, 10]
 {
-    { -2, 8, 4, 6, 12,12 , 12, 12, 16, 14 },
-    { 10, 4, 8, 10, 16, 14, 18,12, 20, 14 },
-    { 6, 8, 6, 8, 14, 12, 16,12, 18, 12 },
-    { 14, 16, 14, 14, 20, 18, 22,18, 24, 18 },
-    { 12, 8, 12, 14, 20, 18, 22,18, 26, 16 },
-    { 14, 16, 14, 14, 20, 18, 22,18, 24, 18 },
-   { 6, 8, 6, 8, 14, 12, 16,12, 18, 12 },
-    { 10, 4, 8, 10, 16, 14, 18,12, 20, 14 },
-    { -2, 8, 4, 6, 12,12 , 12, 12, 16, 14 }
+{ -2, 8, 4, 6, 12,12 , 12, 12, 16, 14 },
+{ 10, 4, 8, 10, 16, 14, 18,12, 20, 14 },
+{ 6, 8, 6, 8, 14, 12, 16,12, 18, 12 },
+{ 14, 16, 14, 14, 20, 18, 22,18, 24, 18 },
+{ 12, 8, 12, 14, 20, 18, 22,18, 26, 16 },
+{ 14, 16, 14, 14, 20, 18, 22,18, 24, 18 },
+{ 6, 8, 6, 8, 14, 12, 16,12, 18, 12 },
+{ 10, 4, 8, 10, 16, 14, 18,12, 20, 14 },
+{ -2, 8, 4, 6, 12,12 , 12, 12, 16, 14 }
 };
-    public static int[,] maEvalRed = new int[9, 10]
+public static int[,] maEvalRed = new int[9, 10]
 {
-    { 0,   0,   4,   2,   4,   6,   8,  12,   4,   4},
-    {-4,   2,   2,   6,  12,  16,  24,  14,   10,   8},
-    {0 ,4 ,8 ,8 ,16 ,14 ,18 ,16 ,28 ,16 },
-    {0 ,4 ,8 ,6 ,14 ,18 ,24 ,20 ,16 ,12 },
-    {0 , -2 ,4 ,10 ,12 ,16 ,20 ,18 ,8 ,4 },
-    {0 ,4 ,8 ,6 ,14 ,18 ,24 ,20 ,16 ,12 },
-    {0 ,4 ,8 ,8 ,16 ,14 ,18 ,16 ,28 ,16 },
-    {-4,   2,   2,   6,  12,  16,  24,  14,   10,   8},
-    { 0,   0,   4,   2,   4,   6,   8,  12,   4,   4}
+{ 0,   0,   4,   2,   4,   6,   8,  12,   4,   4},
+{-4,   2,   2,   6,  12,  16,  24,  14,   10,   8},
+{0 ,4 ,8 ,8 ,16 ,14 ,18 ,16 ,28 ,16 },
+{0 ,4 ,8 ,6 ,14 ,18 ,24 ,20 ,16 ,12 },
+{0 , -2 ,4 ,10 ,12 ,16 ,20 ,18 ,8 ,4 },
+{0 ,4 ,8 ,6 ,14 ,18 ,24 ,20 ,16 ,12 },
+{0 ,4 ,8 ,8 ,16 ,14 ,18 ,16 ,28 ,16 },
+{-4,   2,   2,   6,  12,  16,  24,  14,   10,   8},
+{ 0,   0,   4,   2,   4,   6,   8,  12,   4,   4}
 };
-    public static int[,] tuongEvalRed = new int[9, 10]
+public static int[,] tuongEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
-    public static int[,] siEvalRed = new int[9, 10]
+public static int[,] siEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
-    public static int[,] vuaEvalRed = new int[9, 10]
+public static int[,] vuaEvalRed = new int[9, 10]
 {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {4, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{4, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
-    #endregion
+#endregion
 }

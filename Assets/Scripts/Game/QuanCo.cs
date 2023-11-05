@@ -35,11 +35,45 @@ public class QuanCo : MonoBehaviour
     }
     public void MovePlateSpawn(int cotMovePl, int hangMovePl, bool attack = false)
     {
-        GameObject mp = Instantiate(movePlate, new Vector3(cotMovePl, hangMovePl, 0), Quaternion.identity);
-        MovePlate mpScript = mp.GetComponent<MovePlate>();
-        if (attack) mpScript.attack = true;
-        mpScript.currentMovingObject = gameObject;
+        Move tempmove = new Move(this.gameObject, (int)this.transform.position.x, (int)this.transform.position.y, cotMovePl, hangMovePl);
+        if (IsMoveSafe(tempmove))
+        {
+            GameObject mp = Instantiate(movePlate, new Vector3(cotMovePl, hangMovePl, 0), Quaternion.identity);
+            MovePlate mpScript = mp.GetComponent<MovePlate>();
+            if (attack) mpScript.attack = true;
+            mpScript.currentMovingObject = gameObject;
+        }
     }
+    public bool IsMoveSafe(Move move)
+    {
+        Game controllerScript = controller.GetComponent<Game>();
+        int TempTeam = controllerScript.myTeam;
+        controllerScript.myTeam = this.Team == 1 ? 2 : 1;
+        int targetx = (int)move.targetPos.x;
+        int targety = (int)move.targetPos.y;
+        int oldx = (int)move.oldPos.x;
+        int oldy = (int)move.oldPos.y;
+        GameObject tempcapture = controllerScript.allTitle[targetx, targety];
+        //TEMP MOVE
+        controllerScript.allTitle[oldx, oldy] = null;
+        controllerScript.allTitle[targetx, targety] = move.movingObj;
+        controllerScript.NextTurn();
+        // Call the minimax function
+        var eval = controllerScript.Minimax(1, false, int.MinValue, int.MaxValue).Item2;
+        controllerScript.allTitle[oldx, oldy] = move.movingObj;
+        controllerScript.allTitle[targetx, targety] = tempcapture;
+        controllerScript.NextTurn();
+        controllerScript.myTeam=TempTeam;
+        // If the evaluation is greater than a certain threshold, the move is not safe
+        if (eval < -30000)
+        {
+            return false;
+        }
+
+        // Otherwise, the move is safe
+        return true;
+    }
+
     public void PointMovePlate(int cot, int hang)
     {
         if (cot >= 0 && cot <= 8 && hang >= 0 && hang <= 9)

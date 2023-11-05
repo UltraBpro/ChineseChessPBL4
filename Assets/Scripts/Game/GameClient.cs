@@ -100,8 +100,8 @@ public class GameClient : MonoBehaviour
                     break;
                 case "LOGIN":
                     CurrentAccount = new player { id = int.Parse(info[1]), username = info[2], score = int.Parse(info[3]) };
-                    Debug.Log("Da co account");
-                        break;
+                    Debug.Log("Sucess");
+                    break;
                 case "CHAT":
                     ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + info[1]);
                     break;
