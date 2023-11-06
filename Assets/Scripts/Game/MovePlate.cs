@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MovePlate : MonoBehaviour
 {
     public GameObject controller;
     public GameObject currentMovingObject = null;
     public bool attack = false;
+
     private void Start()
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
@@ -15,6 +14,7 @@ public class MovePlate : MonoBehaviour
             this.GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
+
     public void OnMouseDown()
     {
         Game controlScript = controller.GetComponent<Game>();

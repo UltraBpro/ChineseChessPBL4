@@ -61,11 +61,11 @@
     <Compile Include="Assets\Scripts\UI\LoginMenu.cs" />
     <Compile Include="Assets\Scripts\UI\GraphicMenu.cs" />
     <Compile Include="Assets\Scripts\Game\MovePlate.cs" />
+    <Compile Include="Assets\Scripts\UI\ChangeInput.cs" />
     <Compile Include="Assets\Scripts\Game\GameClient.cs" />
     <Compile Include="Assets\Scripts\UI\CursorController.cs" />
     <Compile Include="Assets\Scripts\Game\Game.cs" />
     <Compile Include="Assets\Scripts\Game\QuanCo.cs" />
-    <Compile Include="Assets\Scripts\UI\ChangeInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,8 +8,9 @@ public class GraphicMenu : MonoBehaviour
     public GameObject Resolutions;
     public GameObject VSync;
     public GameObject AntiAliasing;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Resolution[] resolutions = Screen.resolutions;
         Resolutions.GetComponent<Dropdown>().ClearOptions();
@@ -23,6 +23,7 @@ public class GraphicMenu : MonoBehaviour
         Resolutions.GetComponent<Dropdown>().AddOptions(options);
         Resolutions.GetComponent<Dropdown>().value = resolutions.Length - 7;
     }
+
     public void SaveSetting()
     {
         Resolution resolution = Screen.resolutions[Resolutions.GetComponent<Dropdown>().value + 8];
@@ -32,12 +33,13 @@ public class GraphicMenu : MonoBehaviour
         if (VSync.GetComponent<Text>().text == "ON") QualitySettings.vSyncCount = 1;
         else QualitySettings.vSyncCount = 0;
         QualitySettings.antiAliasing = (System.Convert.ToInt32(AntiAliasing.GetComponent<Dropdown>().options[AntiAliasing.GetComponent<Dropdown>().value].text));
-        
     }
+
     public void ChangeTextMenu()
     {
-        FullScreen.GetComponent<Text>().text=(FullScreen.GetComponent<Text>().text == "ON")? "OFF" : "ON";
+        FullScreen.GetComponent<Text>().text = (FullScreen.GetComponent<Text>().text == "ON") ? "OFF" : "ON";
     }
+
     public void ChangeTextVsync()
     {
         VSync.GetComponent<Text>().text = (VSync.GetComponent<Text>().text == "ON") ? "OFF" : "ON";

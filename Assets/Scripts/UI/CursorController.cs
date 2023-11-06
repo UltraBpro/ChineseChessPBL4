@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CursorController : MonoBehaviour
@@ -8,7 +6,8 @@ public class CursorController : MonoBehaviour
     public Texture2D mouse1;
     public bool useCursor = true;
     public static CursorController instance { get; private set; }
-    void Awake()
+
+    private void Awake()
     {
         if (instance == null)
         {
@@ -21,6 +20,7 @@ public class CursorController : MonoBehaviour
         }
         Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
     }
+
     private void Update()
     {
         if (useCursor)
@@ -35,6 +35,7 @@ public class CursorController : MonoBehaviour
             }
         }
     }
+
     public void NoCursor()
     {
         if (useCursor)

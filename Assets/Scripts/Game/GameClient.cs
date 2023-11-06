@@ -1,9 +1,7 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System;
-using System.Text;
 using System.Net.Sockets;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,18 +9,20 @@ public class GameClient : MonoBehaviour
 {
     public static GameClient instance { get; private set; }
     public static int BufferSize = 4096;
-    string IP; int Port;
+    private string IP; private int Port;
     public int idDuocCap;
     public int idDoiPhuong;
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
-    public player CurrentAccount=null;
+    public player CurrentAccount = null;
+
     public void Awake()
     {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(this);
     }
+
     public void ConnectDenSV(string IPkn, int Portkn)
     {
         instance.IP = IPkn; instance.Port = Portkn;
@@ -34,6 +34,7 @@ public class GameClient : MonoBehaviour
         buffer = new byte[BufferSize];
         ketnoiTCPdenSV.BeginConnect(instance.IP, instance.Port, NhanKetNoi, ketnoiTCPdenSV);
     }
+
     public void NhanKetNoi(IAsyncResult ketnoi)
     {
         ketnoiTCPdenSV.EndConnect(ketnoi);
@@ -43,6 +44,7 @@ public class GameClient : MonoBehaviour
             stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
         }
     }
+
     public void NhanStream(IAsyncResult thongtin)
     {
         try
@@ -63,6 +65,7 @@ public class GameClient : MonoBehaviour
             Debug.Log("Có lỗi xảy ra khi nhận kết nối: " + ex.Message);
         }
     }
+
     public void GuiDenSV(byte[] data)
     {
         try
@@ -74,6 +77,7 @@ public class GameClient : MonoBehaviour
             Debug.Log("Có lỗi xảy ra khi gửi đến server: " + e.Message);
         }
     }
+
     public void DaGuiXongRoi(IAsyncResult ketquagui)
     {
         try
@@ -85,6 +89,7 @@ public class GameClient : MonoBehaviour
             Debug.Log("Có lỗi xảy ra khi hoàn thành gửi: " + e.Message);
         }
     }
+
     private void ReactToServer(string command)
     {
         try
@@ -98,13 +103,16 @@ public class GameClient : MonoBehaviour
                 case "HELLO":
                     idDuocCap = System.Convert.ToInt32(info[1]);
                     break;
+
                 case "LOGIN":
                     CurrentAccount = new player { id = int.Parse(info[1]), username = info[2], score = int.Parse(info[3]) };
                     Debug.Log("Sucess");
                     break;
+
                 case "CHAT":
                     ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + info[1]);
                     break;
+
                 case "MATCH":
                     ThreadManager.ExecuteOnMainThread(() =>
                     {
@@ -113,6 +121,7 @@ public class GameClient : MonoBehaviour
                         idDoiPhuong = System.Convert.ToInt32(info[2]);
                     });
                     break;
+
                 case "LOADCOUP":
                     GlobalThings.GameRule = 1;//Se xoa sau;
                     List<string> nametosave = new List<string>();
@@ -122,6 +131,7 @@ public class GameClient : MonoBehaviour
                         GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().LoadCoUpFromOnl(nametosave);
                     });
                     break;
+
                 case "MOVE":
                     ThreadManager.ExecuteOnMainThread(() =>
                     {

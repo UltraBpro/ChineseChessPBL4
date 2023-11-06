@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-
-    Animator anim;
+    private Animator anim;
 
     public int quickSaveSlotID;
 
     [Header("Options Panel")]
     public GameObject MainOptionsPanel;
+
     public GameObject StartGameOptionsPanel;
     public GameObject GamePanel;
     public GameObject ControlsPanel;
@@ -24,7 +22,7 @@ public class MainMenu : MonoBehaviour
     private AudioSource audioSource;
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
@@ -50,7 +48,6 @@ public class MainMenu : MonoBehaviour
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-
     }
 
     public void openStartGameOptions()
@@ -67,7 +64,6 @@ public class MainMenu : MonoBehaviour
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-
     }
 
     public void openOptions_Game()
@@ -84,8 +80,8 @@ public class MainMenu : MonoBehaviour
 
         //play click sfx
         playClickSound();
-
     }
+
     public void openOptions_Controls()
     {
         //enable respective panel
@@ -100,8 +96,8 @@ public class MainMenu : MonoBehaviour
 
         //play click sfx
         playClickSound();
-
     }
+
     public void openOptions_Gfx()
     {
         //enable respective panel
@@ -116,7 +112,6 @@ public class MainMenu : MonoBehaviour
 
         //play click sfx
         playClickSound();
-
     }
 
     public void openLoginPanel()
@@ -133,8 +128,8 @@ public class MainMenu : MonoBehaviour
 
         //play click sfx
         playClickSound();
-
     }
+
     public void openSkinPanel()
     {
         //enable respective panel
@@ -149,8 +144,8 @@ public class MainMenu : MonoBehaviour
 
         //play click sfx
         playClickSound();
-
     }
+
     public void SkinSelected(int skinid)
     {
         GlobalThings.SkinID = skinid;
@@ -161,9 +156,11 @@ public class MainMenu : MonoBehaviour
         GlobalThings.GameMode = GameModeCreate;
         SceneManager.LoadScene("ChineseChessGame");
     }
-    #endregion
+
+    #endregion Open Different panels
 
     #region Back Buttons
+
     public void back_options()
     {
         //simply play anim for CLOSING main options panel
@@ -183,16 +180,17 @@ public class MainMenu : MonoBehaviour
         anim.Play("OptTweenAnim_off");
         //play click sfx
         playClickSound();
-
     }
 
     public void Quit()
     {
         Application.Quit();
     }
-    #endregion
+
+    #endregion Back Buttons
 
     #region Sounds
+
     public void playHoverClip()
     {
         audioSource.clip = HoverSound;
@@ -204,16 +202,17 @@ public class MainMenu : MonoBehaviour
         audioSource.clip = ClickSound;
         audioSource.Play();
     }
+
     public void SaveMusic(float volume)
     {
         GlobalThings.MusicVolume = volume;
     }
+
     public void SaveSound(float volume)
     {
         GlobalThings.SoundVolume = volume;
         audioSource.volume = volume;
-
     }
-    #endregion
 
+    #endregion Sounds
 }

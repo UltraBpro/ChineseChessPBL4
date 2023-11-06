@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +14,7 @@ public class LoginMenu : MonoBehaviour
     public GameObject textboxPasswordLogin;
     public GameObject MessageLogin;
     public GameObject MessageRegister;
+
     public void openRegisterPanel()
     {
         RegisterPanel.SetActive(true);
@@ -30,10 +29,11 @@ public class LoginMenu : MonoBehaviour
 
     public void HiddenConnect()
     {
-            GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
+        GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
     }
 
     #region DangKy
+
     public void Register()
     {
         if (textboxPasswordRegister.GetComponent<InputField>().text == textboxPasswordRegisterDoubleCheck.GetComponent<InputField>().text)
@@ -63,6 +63,7 @@ public class LoginMenu : MonoBehaviour
         }
         else MessageRegister.GetComponent<Text>().text = "Password nhập hai lần phải trùng khớp.";
     }
+
     public static string CreateSalt(int size)
     {
         // Tạo một instance của lớp RNGCryptoServiceProvider
@@ -80,18 +81,21 @@ public class LoginMenu : MonoBehaviour
             return sb.ToString();
         }
     }
-    #endregion
 
+    #endregion DangKy
 
     #region DangNhap
+
     public void Login()
     {
         string username = textboxUsernameLogin.GetComponent<InputField>().text;
         string password = textboxPasswordLogin.GetComponent<InputField>().text;
-        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("LOGIN|"+username+"|"+password+"|"+GameClient.instance.idDuocCap));
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("LOGIN|" + username + "|" + password + "|" + GameClient.instance.idDuocCap));
     }
-    #endregion
+
+    #endregion DangNhap
 }
+
 public class player
 {
     public int id { get; set; }
