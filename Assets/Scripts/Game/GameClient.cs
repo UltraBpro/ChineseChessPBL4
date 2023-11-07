@@ -10,12 +10,15 @@ public class GameClient : MonoBehaviour
     public static GameClient instance { get; private set; }
     public static int BufferSize = 4096;
     private string IP; private int Port;
-    public int idDuocCap;
+    public int idDuocCap=-1;
     public int idDoiPhuong;
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
     public player CurrentAccount = null;
+
+    //Ket qua tra ve
+    public bool WaitingForServer = false;
 
     public void Awake()
     {
@@ -102,6 +105,7 @@ public class GameClient : MonoBehaviour
             {
                 case "HELLO":
                     idDuocCap = System.Convert.ToInt32(info[1]);
+                    WaitingForServer = false;
                     break;
 
                 case "LOGIN":

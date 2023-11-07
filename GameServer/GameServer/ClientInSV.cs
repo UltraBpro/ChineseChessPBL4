@@ -9,17 +9,19 @@ using System.Threading.Tasks;
 
 namespace GameServer
 {
-    class ClientInSV
+    internal class ClientInSV
     {
         public static int BufferSize = 4096;
         public readonly int id;
         public TcpClient ketnoiTCPdenSV;
         private byte[] buffer;
         private NetworkStream stream;
+
         public ClientInSV(int idClient)
         {
             id = idClient;
         }
+
         public void KhoiTaoClient()
         {
             ketnoiTCPdenSV.ReceiveBufferSize = BufferSize;
@@ -28,6 +30,7 @@ namespace GameServer
             buffer = new byte[BufferSize];
             stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
         }
+
         public void NhanStream(IAsyncResult thongtin)
         {
             try
@@ -49,6 +52,7 @@ namespace GameServer
                 Console.WriteLine("Có lỗi xảy ra khi nhận kết nối: " + ex.Message);
             }
         }
+
         public void GuiDenClient(byte[] data)
         {
             try
@@ -73,6 +77,7 @@ namespace GameServer
                 Console.WriteLine("Có lỗi xảy ra khi hoàn thành gửi: " + ex.Message);
             }
         }
+
         private void ReactToClient(string command)
         {
             try
@@ -103,6 +108,7 @@ namespace GameServer
                                 //Thong bao dang ky thanh cong
                             }
                             break;
+
                         case "LOGIN":
                             using (PBL4Entities db = new PBL4Entities())
                             {
@@ -117,9 +123,11 @@ namespace GameServer
                                 }
                             }
                             break;
+
                         case "MATCHMAKING":
                             Server.AddToMMQueue(Convert.ToInt32(info[1]));
                             break;
+
                         case "MATCHMAKINGCOUP":
                             Server.AddToMMQueueCoUp(Convert.ToInt32(info[1]));
                             break;
@@ -131,6 +139,7 @@ namespace GameServer
                 Console.WriteLine("Có lỗi xảy ra phản ứng client: " + ex.Message);
             }
         }
+
         public bool VerifyAccount(string password, string salt, string hashtoverify)
         {
             using (MD5 md5 = MD5.Create())

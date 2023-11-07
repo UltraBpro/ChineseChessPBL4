@@ -8,14 +8,15 @@ using System.Net;
 
 namespace GameServer
 {
-    class Server
-    {
-        public static int MaxConnections=20;
-        public static int Port=1006;
+    internal static class Server
+    { 
+        public static int MaxConnections = 20;
+        public static int Port = 1006;
         public static Dictionary<int, ClientInSV> DSClient = new Dictionary<int, ClientInSV>();
         public static Queue<int> MatchmakingQueue = new Queue<int>();
         public static Queue<int> MatchmakingQueueCoUp = new Queue<int>();
         public static TcpListener ServerTcpListener;
+        
         public static void Chay(string IPtoHost)
         {
             for (int i = 0; i < MaxConnections; i++) DSClient.Add(i, new ClientInSV(i));
@@ -24,6 +25,7 @@ namespace GameServer
             ServerTcpListener.BeginAcceptTcpClient(new AsyncCallback(NhanKetNoi), null);
             Console.WriteLine("Tao SV o Port: " + Port);
         }
+
         private static void NhanKetNoi(IAsyncResult ketqua)
         {
             TcpClient clientketnoi = ServerTcpListener.EndAcceptTcpClient(ketqua);
@@ -33,13 +35,14 @@ namespace GameServer
             {
                 if (DSClient[i].ketnoiTCPdenSV == null)
                 {
-                    DSClient[i].ketnoiTCPdenSV=clientketnoi;
+                    DSClient[i].ketnoiTCPdenSV = clientketnoi;
                     DSClient[i].KhoiTaoClient();
                     DSClient[i].GuiDenClient(Encoding.UTF8.GetBytes("HELLO|" + DSClient[i].id));
                     break;
                 }
             }
         }
+
         public static void AddToMMQueue(int idadd)
         {
             MatchmakingQueue.Enqueue(idadd);
@@ -48,6 +51,7 @@ namespace GameServer
                 TaoMatch(MatchmakingQueue.Dequeue(), MatchmakingQueue.Dequeue());
             }
         }
+
         public static void AddToMMQueueCoUp(int idadd)
         {
             MatchmakingQueueCoUp.Enqueue(idadd);
@@ -56,7 +60,8 @@ namespace GameServer
                 TaoMatch(MatchmakingQueueCoUp.Dequeue(), MatchmakingQueueCoUp.Dequeue());
             }
         }
-        public static void TaoMatch(int id1,int id2)
+
+        public static void TaoMatch(int id1, int id2)
         {
             Console.WriteLine("Tien hanh ghep tran giua client" + id1 + " va client" + id2);
             byte[] data = Encoding.UTF8.GetBytes("MATCH|1|" + id2);

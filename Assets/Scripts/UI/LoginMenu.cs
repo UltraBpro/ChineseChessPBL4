@@ -19,17 +19,44 @@ public class LoginMenu : MonoBehaviour
     {
         RegisterPanel.SetActive(true);
         LoginPanel.SetActive(false);
+        ResetContent();
     }
 
     public void openLoginPanel()
     {
         RegisterPanel.SetActive(false);
         LoginPanel.SetActive(true);
+        ResetContent();
     }
 
     public void HiddenConnect()
     {
-        GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
+        if (GameClient.instance.idDuocCap == -1)
+        {
+            GameClient.instance.WaitingForServer = true;
+            GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
+            float startTime = Time.realtimeSinceStartup;
+            while (GameClient.instance.WaitingForServer)
+            {
+                if (Time.realtimeSinceStartup - startTime > 5)
+                {
+                    GameClient.instance.WaitingForServer = false;
+                    break;
+                }
+                if(!GameClient.instance.WaitingForServer)this.gameObject.GetComponent<MainMenu>().openLoginPanel();
+            }
+        }
+    }
+
+    public void ResetContent()
+    {
+        textboxUsernameRegister.GetComponent<InputField>().text = "";
+        textboxPasswordRegister.GetComponent<InputField>().text = "";
+        textboxPasswordRegisterDoubleCheck.GetComponent<InputField>().text = "";
+        textboxUsernameLogin.GetComponent<InputField>().text = "";
+        textboxPasswordLogin.GetComponent<InputField>().text = "";
+        MessageLogin.GetComponent<Text>().text = "";
+        MessageRegister.GetComponent<Text>().text = "";
     }
 
     #region DangKy
@@ -59,6 +86,7 @@ public class LoginMenu : MonoBehaviour
                     sb.Append(hashBytes[i].ToString("X2"));
                 }
                 GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("REGISTER|" + username + "|" + sb.ToString() + "|" + salt));
+
             }
         }
         else MessageRegister.GetComponent<Text>().text = "Password nhập hai lần phải trùng khớp.";

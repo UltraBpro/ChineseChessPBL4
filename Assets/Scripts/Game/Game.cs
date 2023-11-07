@@ -27,6 +27,7 @@ public class Game : MonoBehaviour
         }
         foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
         foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
+        if (GlobalThings.GameRule == 1) LoadCoUp();
     }
 
     public void DestroyMovePlates()
@@ -64,7 +65,11 @@ public class Game : MonoBehaviour
         //extra
         QuanCo concodangdi = currentMovingObject.GetComponent<QuanCo>();
         if (GlobalThings.GameRule == 1)
-            if (concodangdi.TenThatCoUp != null) { concodangdi.LoadSkin(); }
+            if (concodangdi.TenThatCoUp != null) 
+            { 
+                concodangdi.TenQuanCo = concodangdi.TenThatCoUp; concodangdi.TenThatCoUp = null;
+                concodangdi.LoadSkin();
+            }
     }
 
     public void DietQuan(int cot, int hang)
@@ -135,7 +140,6 @@ public class Game : MonoBehaviour
 
     public void LoadCoUp()
     {
-        GlobalThings.GameRule = 1;
         List<string> names = new List<string> { "si", "tuong", "ma", "xe","phao",
                                                 "si", "tuong", "ma", "xe","phao",
                                                 "tot","tot","tot","tot","tot",
@@ -165,8 +169,14 @@ public class Game : MonoBehaviour
             List<string> temp = new List<string>();
             for (int i = 0; i < P1.Count; i++) temp.Add(P1[i].GetComponent<QuanCo>().TenThatCoUp);
             for (int i = 0; i < P2.Count; i++) temp.Add(P2[i].GetComponent<QuanCo>().TenThatCoUp);
-            CoUpTemp(temp);
+            SendCoUpToOnl(temp);
         }
+    }
+    public void SendCoUpToOnl(List<string> allname)
+    {
+        string allnameonboard = "";
+        foreach (string name in allname) allnameonboard += "|" + name;
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|LOADCOUP" + allnameonboard));
     }
 
     public void LoadCoUpFromOnl(List<string> allname)
@@ -570,13 +580,6 @@ public class Game : MonoBehaviour
         });
     }
 
-    public void ConnectDenSV()
-    {
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
-            GameClient.instance.ConnectDenSV(GameObject.Find("TextBoxIPTEMP").GetComponent<InputField>().text, 1006);
-        });
-    }
 
     public void TEMP()
     {
@@ -585,12 +588,7 @@ public class Game : MonoBehaviour
         else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
     }
 
-    public void CoUpTemp(List<string> allname)
-    {
-        string allnameonboard = "";
-        foreach (string name in allname) allnameonboard += "|" + name;
-        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|LOADCOUP" + allnameonboard));
-    }
+
 
     #endregion SE XOA SAU
 }

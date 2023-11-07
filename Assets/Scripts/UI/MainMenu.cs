@@ -175,6 +175,7 @@ public class MainMenu : MonoBehaviour
 
     public void back_options_panels()
     {
+        this.GetComponent<LoginMenu>().ResetContent();
         //simply play anim for CLOSING main options panel
         SkinPanel.SetActive(false);
         anim.Play("OptTweenAnim_off");
@@ -215,4 +216,8 @@ public class MainMenu : MonoBehaviour
     }
 
     #endregion Sounds
+    public void ChangeGameRule()
+    {
+        GlobalThings.GameRule = GlobalThings.GameRule == 0 ? 1 : 0;
+    }
 }

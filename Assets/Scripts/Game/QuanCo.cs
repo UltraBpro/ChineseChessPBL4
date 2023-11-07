@@ -261,8 +261,6 @@ public class QuanCo : MonoBehaviour
     public void LoadSkin()
     {
         SpriteRenderer SpriteQuanCo = GetComponent<SpriteRenderer>();
-        if (GlobalThings.GameRule == 1)
-        { TenQuanCo = TenThatCoUp; TenThatCoUp = null; }
 
         switch (TenQuanCo)
         {
