@@ -15,7 +15,7 @@ public class GameClient : MonoBehaviour
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
-    public player CurrentAccount = null;
+    public player CurrentAccount = null,EnemyAccount=null;
 
     //Ket qua tra ve
     public bool WaitingForServer = false;

@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 75632626}
   - component: {fileID: 75632625}
   m_Layer: 5
-  m_Name: NamePlate
+  m_Name: BlackNamePlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -415,7 +415,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: "T\xEAn ng\u01B0\u1EDDi ch\u01A1i"
+  m_Text: Black King
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 105176772}
   - component: {fileID: 105176771}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BlackAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2534,7 +2534,7 @@ GameObject:
   - component: {fileID: 589776763}
   - component: {fileID: 589776762}
   m_Layer: 5
-  m_Name: NamePlate
+  m_Name: RedNamePlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2620,7 +2620,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: "T\xEAn ng\u01B0\u1EDDi ch\u01A1i"
+  m_Text: Red Prince
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -2844,7 +2844,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "T\xEAn ng\u01B0\u1EDDi ch\u01A1i"
+  m_Text: Red Prince
 --- !u!222 &694562917
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3465,7 +3465,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 3:00
+  m_Text: 0:00
 --- !u!222 &936818307
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3752,7 +3752,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 3:00
+  m_Text: 0:00
 --- !u!222 &981890178
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4419,7 +4419,7 @@ GameObject:
   - component: {fileID: 1189957498}
   - component: {fileID: 1189957497}
   m_Layer: 5
-  m_Name: Timer
+  m_Name: BlackTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4505,7 +4505,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 3:00
+  m_Text: 0:00
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -4728,6 +4728,16 @@ MonoBehaviour:
   myTeam: 1
   MoveSound: {fileID: 8300000, guid: 7f730966b139fe043bcd8b93feb6ce4b, type: 3}
   EatSound: {fileID: 8300000, guid: 2e5b6b6a82162d34dab6d666446d7310, type: 3}
+  TimeLimit: 120
+  ChatBoxTextOutput: {fileID: 879330349}
+  ChatBoxTextInput: {fileID: 949968674}
+  RedTimer: {fileID: 1467139643}
+  RedAvatar: {fileID: 1386009006}
+  RedName: {fileID: 589776760}
+  BlackTimer: {fileID: 1189957495}
+  BlackAvatar: {fileID: 105176769}
+  BlackName: {fileID: 75632623}
+  ChatPanel: {fileID: 267055465}
 --- !u!4 &1208290860
 Transform:
   m_ObjectHideFlags: 0
@@ -5233,7 +5243,7 @@ GameObject:
   - component: {fileID: 1386009009}
   - component: {fileID: 1386009008}
   m_Layer: 5
-  m_Name: Image
+  m_Name: RedAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5460,7 +5470,7 @@ GameObject:
   - component: {fileID: 1467139646}
   - component: {fileID: 1467139645}
   m_Layer: 5
-  m_Name: Timer
+  m_Name: RedTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5546,7 +5556,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 3:00
+  m_Text: 0:00
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -8030,7 +8040,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "T\xEAn ng\u01B0\u1EDDi ch\u01A1i"
+  m_Text: Black King
 --- !u!222 &1964558482
 CanvasRenderer:
   m_ObjectHideFlags: 0

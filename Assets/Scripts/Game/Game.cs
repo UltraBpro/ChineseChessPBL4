@@ -15,6 +15,13 @@ public class Game : MonoBehaviour
     private AudioSource audioSource;
     private int P1Jail = 0, P2Jail = 0;
 
+    //biến UI
+    public float TimeLimit = 120;
+    private float TimeLeftThisTurn = 120;
+    public GameObject ChatBoxTextOutput, ChatBoxTextInput;
+    public GameObject RedTimer, RedAvatar, RedName, BlackTimer, BlackAvatar, BlackName;
+    public GameObject ChatPanel;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -28,6 +35,24 @@ public class Game : MonoBehaviour
         foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
         foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
         if (GlobalThings.GameRule == 1) LoadCoUp();
+        LoadPanel();
+    }
+
+    private void Update()
+    {
+        TimeLeftThisTurn -= Time.deltaTime;
+
+        if (TimeLeftThisTurn <= 0)
+        {
+            MakeRandomMove();
+        }
+        else
+        {
+            int minutes = (int)(TimeLeftThisTurn / 60);
+            int seconds = (int)(TimeLeftThisTurn % 60);
+            if (PlayingTeam == 1) RedTimer.GetComponent<InputField>().text = String.Format("{0:D2}:{1:D2}", minutes, seconds);
+            else BlackTimer.GetComponent<InputField>().text = String.Format("{0:D2}:{1:D2}", minutes, seconds);
+        }
     }
 
     public void DestroyMovePlates()
@@ -62,11 +87,19 @@ public class Game : MonoBehaviour
         currentMovingObject.transform.position = new Vector3(cot, hang, 0);
         //Update the matrix
         allTitle[cot, hang] = currentMovingObject;
+        //Check chiếu hết
+        if (PlayingTeam == 2) PlayingTeam = 1;
+        else PlayingTeam++;
+        if (CheckCheckMate()) Debug.Log("Stop game");
+        if (PlayingTeam == 2) PlayingTeam = 1;
+        else PlayingTeam++;
+        //Dat timer
+        TimeLeftThisTurn = TimeLimit;
         //extra
         QuanCo concodangdi = currentMovingObject.GetComponent<QuanCo>();
         if (GlobalThings.GameRule == 1)
-            if (concodangdi.TenThatCoUp != null) 
-            { 
+            if (concodangdi.TenThatCoUp != null)
+            {
                 concodangdi.TenQuanCo = concodangdi.TenThatCoUp; concodangdi.TenThatCoUp = null;
                 concodangdi.LoadSkin();
             }
@@ -77,12 +110,12 @@ public class Game : MonoBehaviour
         GameObject cp = allTitle[cot, hang];
         QuanCo loaiQuan = cp.GetComponent<QuanCo>();
         allTitle[cot, hang] = null;
-        if (loaiQuan.TenQuanCo == "vua")
-        {
-            if (loaiQuan.Team == 1) Debug.Log("Player 2 win");
-            else Debug.Log("Player 1 win");
-        }
-        cp.transform.position = new Vector3(0.5f * (loaiQuan.Team == 1 ? P1Jail++ : P2Jail++), loaiQuan.Team == 1 ? -1 : 10, loaiQuan.Team == 1 ? -P1Jail : -P2Jail);
+        //if (loaiQuan.TenQuanCo == "vua")
+        //{
+        //    if (loaiQuan.Team == 1) Debug.Log("Player 2 win");
+        //    else Debug.Log("Player 1 win");
+        //}
+        cp.transform.position = new Vector3(0.5f * (loaiQuan.Team == 1 ? P1Jail++ : P2Jail++), loaiQuan.Team == 1 ? 10 : -1, loaiQuan.Team == 1 ? -P1Jail : -P2Jail);
         cp.GetComponent<BoxCollider2D>().enabled = false;
     }
 
@@ -115,6 +148,16 @@ public class Game : MonoBehaviour
         else PlayingTeam++;
     }
 
+    public bool CheckCheckMate()
+    {
+        List<Move> allmoves = AllPossibleMove();
+        foreach (Move movetocheck in allmoves)
+        {
+            if (movetocheck.movingObj.GetComponent<QuanCo>().IsMoveSafe(movetocheck)) return false;
+        }
+        return true;
+    }
+
     public bool CheckEndGame()
     {
         int founded = 0;
@@ -130,6 +173,21 @@ public class Game : MonoBehaviour
             }
         }
         return founded != 2;
+    }
+
+    public void MakeRandomMove()
+    {
+        List<Move> allmoves = AllPossibleMove();
+        for (int i = allmoves.Count - 1; i >= 0; i--)
+        {
+            if (!allmoves[i].movingObj.GetComponent<QuanCo>().IsMoveSafe(allmoves[i]))
+            {
+                allmoves.RemoveAt(i);
+            }
+        }
+        Move randomMove = allmoves[(new System.Random()).Next(allmoves.Count)];
+        DiChuyenQuan(randomMove.movingObj, (int)randomMove.targetPos.x, (int)randomMove.targetPos.y);
+        NextTurn();
     }
 
     public GameObject CheckObjOnTitle(int cot, int hang)
@@ -172,6 +230,7 @@ public class Game : MonoBehaviour
             SendCoUpToOnl(temp);
         }
     }
+
     public void SendCoUpToOnl(List<string> allname)
     {
         string allnameonboard = "";
@@ -195,18 +254,44 @@ public class Game : MonoBehaviour
         }
     }
 
+    public void LoadPanel()
+    {
+        if (GlobalThings.GameMode == 2)
+        {
+            ChatPanel.SetActive(true);
+            if (myTeam == 1)
+            {
+                RedName.GetComponent<InputField>().text = GameClient.instance.CurrentAccount.username;
+                BlackName.GetComponent<InputField>().text = GameClient.instance.EnemyAccount.username;
+            }
+            else
+            {
+                BlackName.GetComponent<InputField>().text = GameClient.instance.CurrentAccount.username;
+                RedName.GetComponent<InputField>().text = GameClient.instance.EnemyAccount.username;
+            }
+        }
+        if (GlobalThings.GameMode == 1)
+        {
+            if (myTeam == 1)
+            {
+                BlackName.GetComponent<InputField>().text = "BOT";
+                BlackAvatar.GetComponent<Image>().sprite= Resources.Load<Sprite>("Sprites/UI/AvatarBotMaster");
+            }
+            else
+            { 
+                RedName.GetComponent<InputField>().text = "BOT";
+                RedAvatar.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/UI/AvatarBotMaster");
+            }
+        }
+    }
+
     #region BOT'S SHITSSSSSSSSS
 
     public void BotPlay()
     {
         Move botmove = Minimax(4, true, int.MinValue, int.MaxValue).Item1;
-        if (botmove != null)
-        {
-            DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
-            NextTurn();
-        }
-        else Debug.Log("Bot thua rôi");
-        //BOT PLAY, DUHHH
+        DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
+        NextTurn();
     }
 
     public int BoardEvaluation()
@@ -569,17 +654,13 @@ public class Game : MonoBehaviour
     //TEMP SE XOA SAU
     public void Chat()
     {
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
-            string content = "";
-            if (GameClient.instance.CurrentAccount != null) content += GameClient.instance.CurrentAccount.username + ": ";
-            content += GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text;
-            GameObject.Find("ChatBoxTextInput").GetComponent<InputField>().text = "";
-            GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
-            GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + content;
-        });
+        string content = "";
+        if (GameClient.instance.CurrentAccount != null) content += GameClient.instance.CurrentAccount.username + ": ";
+        content += ChatBoxTextInput.GetComponent<InputField>().text;
+        ChatBoxTextInput.GetComponent<InputField>().text = "";
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|CHAT|" + content));
+        ChatBoxTextOutput.GetComponent<Text>().text += "\n" + content;
     }
-
 
     public void TEMP()
     {
@@ -587,8 +668,6 @@ public class Game : MonoBehaviour
         if (GlobalThings.GameRule == 0) GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
         else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
     }
-
-
 
     #endregion SE XOA SAU
 }

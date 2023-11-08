@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace GameServer
 {
     internal static class Server
-    { 
+    {
         public static int MaxConnections = 20;
         public static int Port = 1006;
         public static Dictionary<int, ClientInSV> DSClient = new Dictionary<int, ClientInSV>();
         public static Queue<int> MatchmakingQueue = new Queue<int>();
         public static Queue<int> MatchmakingQueueCoUp = new Queue<int>();
         public static TcpListener ServerTcpListener;
-        
+
         public static void Chay(string IPtoHost)
         {
             for (int i = 0; i < MaxConnections; i++) DSClient.Add(i, new ClientInSV(i));
