@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class MainMenu : MonoBehaviour
 {
@@ -16,7 +18,8 @@ public class MainMenu : MonoBehaviour
     public GameObject GfxPanel;
     public GameObject LoginPanel;
     public GameObject SkinPanel;
-
+    public GameObject BotLevelSelector;
+        
     public AudioClip ClickSound;
     public AudioClip HoverSound;
     private AudioSource audioSource;
@@ -154,7 +157,7 @@ public class MainMenu : MonoBehaviour
     public void newGame(int GameModeCreate)
     {
         GlobalThings.GameMode = GameModeCreate;
-        SceneManager.LoadScene("ChineseChessGame");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
     }
 
     #endregion Open Different panels
@@ -219,5 +222,20 @@ public class MainMenu : MonoBehaviour
     public void ChangeGameRule()
     {
         GlobalThings.GameRule = GlobalThings.GameRule == 0 ? 1 : 0;
+    }
+    public void ChangeDoKho()
+    {
+        switch (BotLevelSelector.GetComponent<Dropdown>().options[BotLevelSelector.GetComponent<Dropdown>().value].text)
+        {
+            case "Cực khó":
+                GlobalThings.BotLevel = 4;
+                break;
+            case "Khó":
+                GlobalThings.BotLevel = 3;
+                break;
+            case "Dễ":
+                GlobalThings.BotLevel = 2;
+                break;
+        }
     }
 }

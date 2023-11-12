@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Game : MonoBehaviour
@@ -17,6 +18,7 @@ public class Game : MonoBehaviour
 
     //biến UI
     public float TimeLimit = 120;
+
     private float TimeLeftThisTurn = 120;
     public GameObject ChatBoxTextOutput, ChatBoxTextInput;
     public GameObject RedTimer, RedAvatar, RedName, BlackTimer, BlackAvatar, BlackName;
@@ -67,6 +69,7 @@ public class Game : MonoBehaviour
 
     public void DiChuyenQuan(GameObject currentMovingObject, int cot, int hang)
     {
+        if(LastMove!=null)LastMove.movingObj.GetComponent<SpriteRenderer>().color = Color.white;
         LastMove = new Move
         {
             movingObj = currentMovingObject,
@@ -80,9 +83,15 @@ public class Game : MonoBehaviour
             LastMove.capturedObj = allTitle[cot, hang];
             DietQuan(cot, hang);
             audioSource.clip = EatSound;
+
         }
-        else audioSource.clip = MoveSound;
+        else 
+        { 
+            audioSource.clip = MoveSound;
+        }
         audioSource.Play();
+        if(currentMovingObject.GetComponent<QuanCo>().Team==1) currentMovingObject.GetComponent<SpriteRenderer>().color = new Color(1, 0.6f, 0.6f);
+        else currentMovingObject.GetComponent<SpriteRenderer>().color = new Color(0.6f, 1, 0.6f);
         if (allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y] == currentMovingObject) allTitle[(int)currentMovingObject.transform.position.x, (int)currentMovingObject.transform.position.y] = null;
         currentMovingObject.transform.position = new Vector3(cot, hang, 0);
         //Update the matrix
@@ -123,6 +132,7 @@ public class Game : MonoBehaviour
     {
         if (LastMove != null)
         {
+            LastMove.movingObj.GetComponent<SpriteRenderer>().color = Color.white;
             if (LastMove.capturedObj != null)
             {
                 LastMove.capturedObj.transform.position = LastMove.targetPos;
@@ -139,7 +149,6 @@ public class Game : MonoBehaviour
             NextTurn();
             DestroyMovePlates();
         }
-        else Debug.Log("Lạy hồn m đã di chuyển chi đâu? Đào bug à?");
     }
 
     public void NextTurn()
@@ -188,6 +197,7 @@ public class Game : MonoBehaviour
         Move randomMove = allmoves[(new System.Random()).Next(allmoves.Count)];
         DiChuyenQuan(randomMove.movingObj, (int)randomMove.targetPos.x, (int)randomMove.targetPos.y);
         NextTurn();
+        if (GlobalThings.GameMode == 1) BotPlay();
     }
 
     public GameObject CheckObjOnTitle(int cot, int hang)
@@ -272,15 +282,28 @@ public class Game : MonoBehaviour
         }
         if (GlobalThings.GameMode == 1)
         {
+            string botname = "MASTER";
+            switch (GlobalThings.BotLevel)
+            {
+                case 2:
+                    botname = "NOOB";
+                    break;
+                case 3:
+                    botname = "SENIOR";
+                    break;
+                case 4:
+                    botname = "MASTER";
+                    break;
+            }
             if (myTeam == 1)
             {
-                BlackName.GetComponent<InputField>().text = "BOT";
-                BlackAvatar.GetComponent<Image>().sprite= Resources.Load<Sprite>("Sprites/UI/AvatarBotMaster");
+                BlackName.GetComponent<InputField>().text = "BOT " + botname;
+                BlackAvatar.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/UI/AvatarBot" + botname);
             }
             else
-            { 
-                RedName.GetComponent<InputField>().text = "BOT";
-                RedAvatar.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/UI/AvatarBotMaster");
+            {
+                RedName.GetComponent<InputField>().text = "BOT " + botname;
+                RedAvatar.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/UI/AvatarBot" + botname);
             }
         }
     }
@@ -289,7 +312,7 @@ public class Game : MonoBehaviour
 
     public void BotPlay()
     {
-        Move botmove = Minimax(4, true, int.MinValue, int.MaxValue).Item1;
+        Move botmove = Minimax(GlobalThings.BotLevel, true, int.MinValue, int.MaxValue).Item1;
         DiChuyenQuan(botmove.movingObj, (int)botmove.targetPos.x, (int)botmove.targetPos.y);
         NextTurn();
     }
@@ -669,6 +692,13 @@ public class Game : MonoBehaviour
         else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
     }
 
+    public void loadMainMenuToExit()
+    {
+        Camera.main.orthographic = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1);
+        Debug.Log("Exit");
+    }
+
     #endregion SE XOA SAU
 }
 
@@ -700,6 +730,7 @@ public static class GlobalThings
 {
     public static int GameMode = 0;
     public static int GameRule = 0;
+    public static int BotLevel = 4;
     public static int SkinID = 2;
     public static float MusicVolume = 1;
     public static float SoundVolume = 1;
