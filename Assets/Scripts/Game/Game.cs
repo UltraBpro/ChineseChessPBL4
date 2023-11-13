@@ -694,8 +694,8 @@ public class Game : MonoBehaviour
 
     public void loadMainMenuToExit()
     {
-        Camera.main.orthographic = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1);
+        LoadingThings.LoadingTarget = 0;
+        SceneManager.LoadScene(2);
         Debug.Log("Exit");
     }
 

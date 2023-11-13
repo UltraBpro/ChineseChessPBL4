@@ -157,7 +157,8 @@ public class MainMenu : MonoBehaviour
     public void newGame(int GameModeCreate)
     {
         GlobalThings.GameMode = GameModeCreate;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        LoadingThings.LoadingTarget = 1;
+        SceneManager.LoadScene(2);
     }
 
     #endregion Open Different panels
