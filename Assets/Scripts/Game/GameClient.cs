@@ -10,16 +10,18 @@ public class GameClient : MonoBehaviour
     public static GameClient instance { get; private set; }
     public static int BufferSize = 4096;
     private string IP; private int Port;
-    public int idDuocCap=-1;
+    public int idDuocCap = -1;
     public int idDoiPhuong;
     public TcpClient ketnoiTCPdenSV;
     private byte[] buffer;
     private NetworkStream stream;
-    public player CurrentAccount = null,EnemyAccount=null;
+    public player CurrentAccount = null, EnemyAccount = null;
 
     //Ket qua tra ve
     public bool WaitingForServer = false;
-
+    public string ErrorType="";
+    public int MyTeamOnline = 0;
+    
     public void Awake()
     {
         if (instance == null) instance = this;
@@ -110,7 +112,21 @@ public class GameClient : MonoBehaviour
 
                 case "LOGIN":
                     CurrentAccount = new player { id = int.Parse(info[1]), username = info[2], score = int.Parse(info[3]) };
-                    Debug.Log("Sucess");
+                    WaitingForServer = false;
+                    break;
+
+                case "ERROR":
+                    CurrentAccount = null;
+                    switch (info[1])
+                    {
+                        case "0":
+                            ErrorType = "Tài khoản không tồn tại.";
+                            break;
+                        case "1":
+                            ErrorType = "Sai mật khẩu";
+                            break;
+                    }
+                    WaitingForServer = false;
                     break;
 
                 case "CHAT":
@@ -118,12 +134,12 @@ public class GameClient : MonoBehaviour
                     break;
 
                 case "MATCH":
-                    ThreadManager.ExecuteOnMainThread(() =>
-                    {
-                        Game controllerscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
-                        controllerscript.myTeam = System.Convert.ToInt32(info[1]);
-                        idDoiPhuong = System.Convert.ToInt32(info[2]);
-                    });
+
+                    MyTeamOnline = System.Convert.ToInt32(info[1]);
+
+                    idDoiPhuong = System.Convert.ToInt32(info[2]);
+                    EnemyAccount = new player { id = int.Parse(info[3]), username = info[4], score = int.Parse(info[5]) };
+                    WaitingForServer = false;
                     break;
 
                 case "LOADCOUP":
@@ -158,5 +174,17 @@ public class GameClient : MonoBehaviour
         {
             Console.WriteLine("Có lỗi xảy ra khi phản ứng server: " + ex.Message);
         }
+    }
+
+    public void Reset()
+    {
+        IP = null;
+        Port = 0;
+        idDuocCap = -1;
+        idDoiPhuong = -1;
+        ketnoiTCPdenSV.Close();
+        CurrentAccount = null; EnemyAccount = null;
+        WaitingForServer = false;
+        MyTeamOnline = 0;
     }
 }

@@ -10,7 +10,7 @@ namespace GameServer
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Nhap IP de host(khong nhap Port, mac dinh la 1006): ");
+            Console.WriteLine("Nhap IP de host, mac dinh la 127.0.0.1 neu khong nhap gi(khong nhap Port, mac dinh la 1006): ");
             Server.Chay(Console.ReadLine());
             while (true) if (Console.ReadKey().Key == ConsoleKey.C) Console.Clear();
         }

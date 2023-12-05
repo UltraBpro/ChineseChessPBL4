@@ -16,7 +16,7 @@ namespace GameServer
         public TcpClient ketnoiTCPdenSV;
         private byte[] buffer;
         private NetworkStream stream;
-
+        public player ThisPlayer = null;
         public ClientInSV(int idClient)
         {
             id = idClient;
@@ -119,7 +119,16 @@ namespace GameServer
                                     if (VerifyAccount(info[2], targetAcc.salt, targetAcc.password))
                                     {
                                         Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("LOGIN|" + targetAcc.id + "|" + targetAcc.username + "|" + targetAcc.score));
+                                        ThisPlayer = targetAcc;
                                     }
+                                    else
+                                    {
+                                        Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|1"));
+                                    }    
+                                }
+                                else
+                                {
+                                    Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|0"));
                                 }
                             }
                             break;
@@ -131,6 +140,14 @@ namespace GameServer
                         case "MATCHMAKINGCOUP":
                             Server.AddToMMQueueCoUp(Convert.ToInt32(info[1]));
                             break;
+                        case "SAVESCORE":
+                            using (PBL4Entities db = new PBL4Entities())
+                            {
+                                player targetAcc=db.players.Find(System.Convert.ToInt32(info[1]));
+                                targetAcc.score = System.Convert.ToInt32(info[2]);
+                                db.SaveChanges();
+                            }
+                                break;
                     }
                 }
             }

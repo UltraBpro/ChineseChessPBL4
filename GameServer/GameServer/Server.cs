@@ -17,11 +17,12 @@ namespace GameServer
 
         public static void Chay(string IPtoHost)
         {
+            if (IPtoHost == "") IPtoHost = "127.0.0.1";
             for (int i = 0; i < MaxConnections; i++) DSClient.Add(i, new ClientInSV(i));
             ServerTcpListener = new TcpListener(IPAddress.Parse(IPtoHost), Port);
             ServerTcpListener.Start();
             ServerTcpListener.BeginAcceptTcpClient(new AsyncCallback(NhanKetNoi), null);
-            Console.WriteLine("Tao SV o Port: " + Port);
+            Console.WriteLine("Tao SV o dia chi: "+IPtoHost+":"+Port);
         }
 
         private static void NhanKetNoi(IAsyncResult ketqua)
@@ -62,12 +63,18 @@ namespace GameServer
         public static void TaoMatch(int id1, int id2)
         {
             Console.WriteLine("Tien hanh ghep tran giua client" + id1 + " va client" + id2);
-            byte[] data = Encoding.UTF8.GetBytes("MATCH|1|" + id2);
+            byte[] data = Encoding.UTF8.GetBytes("MATCH|1|" + id2 + "|" + DSClient[id2].ThisPlayer.id + "|" + DSClient[id2].ThisPlayer.username + "|" + DSClient[id2].ThisPlayer.score);
             DSClient[id1].GuiDenClient(data);
 
             // Gửi ID của client1 tới client2
-            data = Encoding.UTF8.GetBytes("MATCH|2|" + id1);
-            DSClient[id2].GuiDenClient(data);
+            byte[] data2 = Encoding.UTF8.GetBytes("MATCH|2|" + id1 + "|" + DSClient[id1].ThisPlayer.id + "|" + DSClient[id1].ThisPlayer.username + "|" + DSClient[id1].ThisPlayer.score);
+            DSClient[id2].GuiDenClient(data2);
+        }
+
+        public static void GuiThongTinAccount(int idclienttarget, int idaccount)
+        {
+            //byte[] data2 = Encoding.UTF8.GetBytes("ACCOUNT|2|" + id1);
+            //DSClient[idclienttarget].GuiDenClient(data2);
         }
     }
 }

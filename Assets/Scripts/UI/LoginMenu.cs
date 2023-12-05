@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoginMenu : MonoBehaviour
@@ -46,6 +47,7 @@ public class LoginMenu : MonoBehaviour
                 if(!GameClient.instance.WaitingForServer)this.gameObject.GetComponent<MainMenu>().openLoginPanel();
             }
         }
+        else this.gameObject.GetComponent<MainMenu>().openLoginPanel();
     }
 
     public void ResetContent()
@@ -119,6 +121,31 @@ public class LoginMenu : MonoBehaviour
         string username = textboxUsernameLogin.GetComponent<InputField>().text;
         string password = textboxPasswordLogin.GetComponent<InputField>().text;
         GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("LOGIN|" + username + "|" + password + "|" + GameClient.instance.idDuocCap));
+            GameClient.instance.WaitingForServer = true;
+            float startTime = Time.realtimeSinceStartup;
+            while (GameClient.instance.WaitingForServer)
+            {
+                if (Time.realtimeSinceStartup - startTime > 5)
+                {
+                    GameClient.instance.WaitingForServer = false;
+                    MessageLogin.GetComponent<Text>().text = "Không thể kết nối đến server.";
+                    break;
+                }
+                if (!GameClient.instance.WaitingForServer)
+                {
+                if (GameClient.instance.ErrorType=="")
+                {
+                    LoadingThings.LoadingTarget = 3;
+                    SceneManager.LoadScene(2);
+                }
+                else
+                {
+                    MessageLogin.GetComponent<Text>().text = GameClient.instance.ErrorType;
+                    GameClient.instance.ErrorType = "";
+                    break;
+                }
+                }
+            }
     }
 
     #endregion DangNhap

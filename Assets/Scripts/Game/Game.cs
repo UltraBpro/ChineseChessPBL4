@@ -18,12 +18,13 @@ public class Game : MonoBehaviour
 
     //biến UI
     public float TimeLimit = 120;
-
+    private int TurnCount = 0;
     private float TimeLeftThisTurn = 120;
     public GameObject ChatBoxTextOutput, ChatBoxTextInput;
     public GameObject RedTimer, RedAvatar, RedName, BlackTimer, BlackAvatar, BlackName;
     public GameObject ChatPanel;
-
+    public GameObject EndGamePanelPrefab;
+    
     // Start is called before the first frame update
     private void Start()
     {
@@ -97,11 +98,10 @@ public class Game : MonoBehaviour
         //Update the matrix
         allTitle[cot, hang] = currentMovingObject;
         //Check chiếu hết
-        if (PlayingTeam == 2) PlayingTeam = 1;
-        else PlayingTeam++;
-        if (CheckCheckMate()) Debug.Log("Stop game");
-        if (PlayingTeam == 2) PlayingTeam = 1;
-        else PlayingTeam++;
+        NextTurn();
+        if (CheckCheckMate()) ShowEndGamePanel();
+
+        NextTurn();
         //Dat timer
         TimeLeftThisTurn = TimeLimit;
         //extra
@@ -112,6 +112,7 @@ public class Game : MonoBehaviour
                 concodangdi.TenQuanCo = concodangdi.TenThatCoUp; concodangdi.TenThatCoUp = null;
                 concodangdi.LoadSkin();
             }
+        TurnCount++;
     }
 
     public void DietQuan(int cot, int hang)
@@ -148,6 +149,7 @@ public class Game : MonoBehaviour
             LastMove = LastMove.PreMove;
             NextTurn();
             DestroyMovePlates();
+            TurnCount--;
         }
     }
 
@@ -182,6 +184,41 @@ public class Game : MonoBehaviour
             }
         }
         return founded != 2;
+    }
+
+    public void ShowEndGamePanel()
+    {
+        foreach (GameObject tobedisableobject in P1) tobedisableobject.SetActive(false);
+        foreach (GameObject tobedisableobject in P2) tobedisableobject.SetActive(false);
+        float currentTime = Time.time;
+
+        // Qui đổi thời gian sang phút và giây
+        int minutes = Mathf.FloorToInt(currentTime / 60F);
+        int seconds = Mathf.FloorToInt(currentTime - minutes * 60);
+
+        // Hiển thị thời gian đã trôi qua
+        string timeText = string.Format("{0:00}:{1:00}", minutes, seconds);
+        GameObject panelInstance = Instantiate(EndGamePanelPrefab, GameObject.Find("MainCanvas").transform);
+
+        // Get the button and texts from the panel
+        Button button = panelInstance.GetComponentInChildren<Button>();
+        Text[] texts = panelInstance.GetComponentsInChildren<Text>();
+
+        // Set the button's onClick event to call the ExitNow function
+        button.onClick.AddListener(loadMainMenuToExit);
+        // Update the texts
+        
+        if(PlayingTeam==1)texts[0].text = "BLACK WIN";
+        else texts[0].text = "RED WIN";
+        texts[1].text = "Time: "+ timeText;
+        texts[2].text = "Turns: "+TurnCount;
+        if (GlobalThings.GameMode == 2)
+        {
+            if (PlayingTeam != myTeam) texts[3].text = "Score: " + GameClient.instance.CurrentAccount.score + "+1 = " + (++GameClient.instance.CurrentAccount.score);
+            else texts[3].text = "Score: " + GameClient.instance.CurrentAccount.score + "-1 = " + (--GameClient.instance.CurrentAccount.score);
+            GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("SAVESCORE|"+GameClient.instance.CurrentAccount.id+"|"+GameClient.instance.CurrentAccount.score));
+        }
+        else texts[3].text = "Score: Offline";
     }
 
     public void MakeRandomMove()
@@ -269,6 +306,7 @@ public class Game : MonoBehaviour
         if (GlobalThings.GameMode == 2)
         {
             ChatPanel.SetActive(true);
+            myTeam = GameClient.instance.MyTeamOnline;
             if (myTeam == 1)
             {
                 RedName.GetComponent<InputField>().text = GameClient.instance.CurrentAccount.username;
@@ -276,9 +314,10 @@ public class Game : MonoBehaviour
             }
             else
             {
-                BlackName.GetComponent<InputField>().text = GameClient.instance.CurrentAccount.username;
                 RedName.GetComponent<InputField>().text = GameClient.instance.EnemyAccount.username;
+                BlackName.GetComponent<InputField>().text = GameClient.instance.CurrentAccount.username;
             }
+
         }
         if (GlobalThings.GameMode == 1)
         {
@@ -685,18 +724,11 @@ public class Game : MonoBehaviour
         ChatBoxTextOutput.GetComponent<Text>().text += "\n" + content;
     }
 
-    public void TEMP()
-    {
-        GlobalThings.GameMode = 2;
-        if (GlobalThings.GameRule == 0) GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKING|" + GameClient.instance.idDuocCap));
-        else GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("MATCHMAKINGCOUP|" + GameClient.instance.idDuocCap));
-    }
 
     public void loadMainMenuToExit()
     {
         LoadingThings.LoadingTarget = 0;
         SceneManager.LoadScene(2);
-        Debug.Log("Exit");
     }
 
     #endregion SE XOA SAU
