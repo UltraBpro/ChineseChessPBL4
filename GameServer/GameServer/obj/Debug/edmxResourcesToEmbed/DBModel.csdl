@@ -9,6 +9,7 @@
     <Property Name="password" Type="String" MaxLength="64" FixedLength="true" Unicode="false" Nullable="false" />
     <Property Name="salt" Type="String" MaxLength="64" FixedLength="true" Unicode="false" Nullable="false" />
     <Property Name="score" Type="Int32" Nullable="false" />
+    <Property Name="online" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityContainer Name="PBL4Entities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="players" EntityType="Self.player" />

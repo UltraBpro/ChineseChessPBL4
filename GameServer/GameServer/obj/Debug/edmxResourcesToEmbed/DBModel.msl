@@ -9,6 +9,7 @@
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="salt" ColumnName="salt" />
           <ScalarProperty Name="score" ColumnName="score" />
+          <ScalarProperty Name="online" ColumnName="online" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

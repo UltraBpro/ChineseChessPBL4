@@ -727,7 +727,8 @@ public class Game : MonoBehaviour
 
     public void loadMainMenuToExit()
     {
-        LoadingThings.LoadingTarget = 0;
+        if(GlobalThings.GameMode==2)LoadingThings.LoadingTarget = 3;
+        else LoadingThings.LoadingTarget = 0;
         SceneManager.LoadScene(2);
     }
 

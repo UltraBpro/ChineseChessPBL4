@@ -19,5 +19,6 @@ namespace GameServer
         public string password { get; set; }
         public string salt { get; set; }
         public int score { get; set; }
+        public bool online { get; set; }
     }
 }

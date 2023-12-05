@@ -47,6 +47,10 @@ namespace GameServer
                     stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
                 }
             }
+            catch (ObjectDisposedException)
+            {
+                Console.WriteLine("TcpClient đã được Dispose");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine("Có lỗi xảy ra khi nhận kết nối: " + ex.Message);
@@ -118,19 +122,35 @@ namespace GameServer
                                 {
                                     if (VerifyAccount(info[2], targetAcc.salt, targetAcc.password))
                                     {
-                                        Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("LOGIN|" + targetAcc.id + "|" + targetAcc.username + "|" + targetAcc.score));
-                                        ThisPlayer = targetAcc;
+                                        if (targetAcc.online != true)
+                                        {
+                                            Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("LOGIN|" + targetAcc.id + "|" + targetAcc.username + "|" + targetAcc.score));
+                                            ThisPlayer = targetAcc;
+                                            targetAcc.online = true;
+                                            db.SaveChanges();
+                                        }
+                                        else Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|Tài khoản đã được đăng nhập ở nơi khác"));
                                     }
                                     else
                                     {
-                                        Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|1"));
+                                        Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|Sai mật khẩu"));
                                     }    
                                 }
                                 else
                                 {
-                                    Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|0"));
+                                    Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|Tài khoản không tồn tại"));
                                 }
                             }
+                            break;
+                        case "LOGOUT":
+                            using (PBL4Entities db = new PBL4Entities())
+                            {
+                                player targetAcc = db.players.Find(System.Convert.ToInt32(info[1]));
+                                targetAcc.online = false;
+                                db.SaveChanges();
+                            }
+                            Server.DSClient[int.Parse(info[2])].ketnoiTCPdenSV.Dispose();
+                            Server.DSClient[int.Parse(info[2])] = null;
                             break;
 
                         case "MATCHMAKING":

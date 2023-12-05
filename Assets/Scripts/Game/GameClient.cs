@@ -65,6 +65,10 @@ public class GameClient : MonoBehaviour
                 stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
             }
         }
+        catch (ObjectDisposedException)
+        {
+            Debug.Log("TcpClient đã được Dispose");
+        }
         catch (Exception ex)
         {
             Debug.Log("Có lỗi xảy ra khi nhận kết nối: " + ex.Message);
@@ -117,15 +121,7 @@ public class GameClient : MonoBehaviour
 
                 case "ERROR":
                     CurrentAccount = null;
-                    switch (info[1])
-                    {
-                        case "0":
-                            ErrorType = "Tài khoản không tồn tại.";
-                            break;
-                        case "1":
-                            ErrorType = "Sai mật khẩu";
-                            break;
-                    }
+                    ErrorType = info[1];
                     WaitingForServer = false;
                     break;
 
@@ -178,6 +174,7 @@ public class GameClient : MonoBehaviour
 
     public void Reset()
     {
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("LOGOUT|" + CurrentAccount.id +"|"+idDuocCap));
         IP = null;
         Port = 0;
         idDuocCap = -1;
@@ -186,5 +183,9 @@ public class GameClient : MonoBehaviour
         CurrentAccount = null; EnemyAccount = null;
         WaitingForServer = false;
         MyTeamOnline = 0;
+    }
+    void OnApplicationQuit()
+    {
+        Reset();
     }
 }
