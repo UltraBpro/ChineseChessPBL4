@@ -149,8 +149,11 @@ namespace GameServer
                                 targetAcc.online = false;
                                 db.SaveChanges();
                             }
+                            byte[] data=(Encoding.UTF8.GetBytes("LOGOUT"));
+                            IAsyncResult result = stream.BeginWrite(data, 0, data.Length, null, null);
+                            stream.EndWrite(result);
                             Server.DSClient[int.Parse(info[2])].ketnoiTCPdenSV.Dispose();
-                            Server.DSClient[int.Parse(info[2])] = null;
+                            Server.DSClient[int.Parse(info[2])].ketnoiTCPdenSV = null;
                             break;
 
                         case "MATCHMAKING":

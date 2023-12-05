@@ -118,7 +118,9 @@ public class GameClient : MonoBehaviour
                     CurrentAccount = new player { id = int.Parse(info[1]), username = info[2], score = int.Parse(info[3]) };
                     WaitingForServer = false;
                     break;
-
+                case "LOGOUT":
+                    WaitingForServer = false;
+                    break;
                 case "ERROR":
                     CurrentAccount = null;
                     ErrorType = info[1];
@@ -174,15 +176,28 @@ public class GameClient : MonoBehaviour
 
     public void Reset()
     {
-        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("LOGOUT|" + CurrentAccount.id +"|"+idDuocCap));
-        IP = null;
-        Port = 0;
-        idDuocCap = -1;
-        idDoiPhuong = -1;
-        ketnoiTCPdenSV.Close();
-        CurrentAccount = null; EnemyAccount = null;
-        WaitingForServer = false;
-        MyTeamOnline = 0;
+        WaitingForServer = true;
+        if(idDuocCap!=-1) GuiDenSV(Encoding.UTF8.GetBytes("LOGOUT|" + CurrentAccount.id + "|" + idDuocCap));
+        float startTime = Time.realtimeSinceStartup;
+        while (WaitingForServer)
+        {
+            if (Time.realtimeSinceStartup - startTime > 5)
+            {
+                WaitingForServer = false;
+                break;
+            }
+            if (!WaitingForServer)
+            {
+                IP = null;
+                Port = 0;
+                idDuocCap = -1;
+                idDoiPhuong = -1;
+                ketnoiTCPdenSV.Close();
+                CurrentAccount = null; EnemyAccount = null;
+                WaitingForServer = false;
+                MyTeamOnline = 0;
+            }
+        }
     }
     void OnApplicationQuit()
     {
