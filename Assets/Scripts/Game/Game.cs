@@ -23,6 +23,8 @@ public class Game : MonoBehaviour
     public GameObject ChatBoxTextOutput, ChatBoxTextInput;
     public GameObject RedTimer, RedAvatar, RedName, BlackTimer, BlackAvatar, BlackName;
     public GameObject ChatPanel;
+    public GameObject AskPanel;private int HoanCoChance = 0;
+    public GameObject TurnText;
     public GameObject EndGamePanelPrefab;
     
     // Start is called before the first frame update
@@ -56,6 +58,8 @@ public class Game : MonoBehaviour
             if (PlayingTeam == 1) RedTimer.GetComponent<InputField>().text = String.Format("{0:D2}:{1:D2}", minutes, seconds);
             else BlackTimer.GetComponent<InputField>().text = String.Format("{0:D2}:{1:D2}", minutes, seconds);
         }
+        if (PlayingTeam == 1) TurnText.GetComponent<Text>().text = "RED TURN:";
+        else TurnText.GetComponent<Text>().text = "BLACK TURN:";
     }
 
     public void DestroyMovePlates()
@@ -128,7 +132,32 @@ public class Game : MonoBehaviour
         cp.transform.position = new Vector3(0.5f * (loaiQuan.Team == 1 ? P1Jail++ : P2Jail++), loaiQuan.Team == 1 ? 10 : -1, loaiQuan.Team == 1 ? -P1Jail : -P2Jail);
         cp.GetComponent<BoxCollider2D>().enabled = false;
     }
-
+    public void AttemptHoanCo()
+    {
+        if (GlobalThings.GameMode != 2)
+        {
+            HoanCo();
+            HoanCo();
+        }
+        else
+        {
+            if (HoanCoChance > 0)
+            {
+                HoanCo();
+                HoanCo();
+                GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|HOANCO"));
+                HoanCoChance--;
+            }
+            else
+            {
+                GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|ASKHOANCO"));
+                GameClient.instance.WaitingForServer = true;
+                while (GameClient.instance.WaitingForServer)
+                {
+                }
+            }
+        }
+    }
     public void HoanCo()
     {
         if (LastMove != null)
@@ -220,7 +249,30 @@ public class Game : MonoBehaviour
         }
         else texts[3].text = "Score: Offline";
     }
-
+    public void ShowAskPanel()
+    {
+        DestroyMovePlates();
+        foreach (GameObject tobedisableobject in P1) tobedisableobject.SetActive(false);
+        foreach (GameObject tobedisableobject in P2) tobedisableobject.SetActive(false);
+        AskPanel.SetActive(true);
+    }
+    public void AgreeAskPanel()
+    {
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|HOANCO"));
+        HoanCo();
+        HoanCo();
+        HoanCoChance++;
+        foreach (GameObject tobeenable in P1) tobeenable.SetActive(true);
+        foreach (GameObject tobeenable in P2) tobeenable.SetActive(true);
+        AskPanel.SetActive(false);
+    }
+    public void DeclineAskPanel()
+    {
+        GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes(GameClient.instance.idDoiPhuong + "|DECLINEHOANCO"));
+        foreach (GameObject tobeenable in P1) tobeenable.SetActive(true);
+        foreach (GameObject tobeenable in P2) tobeenable.SetActive(true);
+        AskPanel.SetActive(false);
+    }
     public void MakeRandomMove()
     {
         List<Move> allmoves = AllPossibleMove();

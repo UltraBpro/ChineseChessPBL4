@@ -142,7 +142,24 @@ public class GameClient : MonoBehaviour
                 case "CHAT":
                     ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + info[1]);
                     break;
-
+                case "ASKHOANCO":
+                    WaitingForServer = false;
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().ShowAskPanel();
+                    });
+                    break;
+                case "HOANCO":
+                    WaitingForServer = false;
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().HoanCo();
+                        GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>().HoanCo();
+                    });
+                    break;
+                case "DECLINEHOANCO":
+                    WaitingForServer = false;
+                    break;
                 case "MATCH":
 
                     MyTeamOnline = System.Convert.ToInt32(info[1]);
