@@ -10,6 +10,8 @@ public class OnlineMenu : MonoBehaviour
     public AudioClip ClickSound;
     public AudioClip HoverSound;
     public GameObject AccountName;
+    public GameObject LeaderBoardPanel;
+    public GameObject LeaderBoardText;
     private AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
@@ -58,6 +60,16 @@ public class OnlineMenu : MonoBehaviour
     {
         AccountName.GetComponent<InputField>().text = GameClient.instance.CurrentAccount.username;
     }
+    public void LoadLeaderboardPanel()
+    {
+        if (LeaderBoardPanel.activeSelf == false)
+        {
+            LeaderBoardText.GetComponent<Text>().text = "";
+            LeaderBoardPanel.SetActive(true);
+            GameClient.instance.GuiDenSV(Encoding.UTF8.GetBytes("ALLSCORE"));
+        }
+        else LeaderBoardPanel.SetActive(false);
 
+    }
 
 }

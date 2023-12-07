@@ -8,6 +8,8 @@ TagManager:
   - VuaDen
   - VuaDo
   - MusicPlayer
+  - LeaderboardOutput
+  - OnlineMenu
   layers:
   - Default
   - TransparentFX

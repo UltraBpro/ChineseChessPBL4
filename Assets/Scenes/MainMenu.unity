@@ -10898,6 +10898,7 @@ MonoBehaviour:
   idDuocCap: -1
   idDoiPhuong: -1
   WaitingForServer: 0
+  ErrorType: 
   MyTeamOnline: 0
 --- !u!4 &1434435619
 Transform:

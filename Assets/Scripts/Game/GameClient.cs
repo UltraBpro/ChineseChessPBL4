@@ -126,7 +126,19 @@ public class GameClient : MonoBehaviour
                     ErrorType = info[1];
                     WaitingForServer = false;
                     break;
-
+                case "ALLSCORE":
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        string leaderboardtext = GameObject.Find("LeaderboardOutput").GetComponent<Text>().text;
+                        for (int i = 1; i < info.Length; i++)
+                        {
+                            leaderboardtext += info[i] + "\t\t";
+                            
+                            if (i % 3 == 0 && i != 1) leaderboardtext += "\n";
+                        }
+                        GameObject.Find("LeaderboardOutput").GetComponent<Text>().text = leaderboardtext;
+                    });
+                    break;
                 case "CHAT":
                     ThreadManager.ExecuteOnMainThread(() => GameObject.Find("ChatBoxTextOutput").GetComponent<Text>().text += "\n" + info[1]);
                     break;
@@ -176,26 +188,34 @@ public class GameClient : MonoBehaviour
 
     public void Reset()
     {
-        WaitingForServer = true;
-        if(idDuocCap!=-1) GuiDenSV(Encoding.UTF8.GetBytes("LOGOUT|" + CurrentAccount.id + "|" + idDuocCap));
-        float startTime = Time.realtimeSinceStartup;
-        while (WaitingForServer)
+        if (idDuocCap != -1)
         {
-            if (Time.realtimeSinceStartup - startTime > 5)
+            WaitingForServer = true;
+            int logoutid = -1;
+            if (CurrentAccount != null) logoutid = CurrentAccount.id;
+            byte[] data = Encoding.UTF8.GetBytes("LOGOUT|" + logoutid);
+            IAsyncResult result = stream.BeginWrite(data, 0, data.Length, null, null);
+            stream.EndWrite(result);
+
+            float startTime = Time.realtimeSinceStartup;
+            while (WaitingForServer)
             {
-                WaitingForServer = false;
-                break;
-            }
-            if (!WaitingForServer)
-            {
-                IP = null;
-                Port = 0;
-                idDuocCap = -1;
-                idDoiPhuong = -1;
-                ketnoiTCPdenSV.Close();
-                CurrentAccount = null; EnemyAccount = null;
-                WaitingForServer = false;
-                MyTeamOnline = 0;
+                if (Time.realtimeSinceStartup - startTime > 5)
+                {
+                    WaitingForServer = false;
+                    break;
+                }
+                if (!WaitingForServer)
+                {
+                    IP = null;
+                    Port = 0;
+                    idDuocCap = -1;
+                    idDoiPhuong = -1;
+                    ketnoiTCPdenSV.Close();
+                    CurrentAccount = null; EnemyAccount = null;
+                    WaitingForServer = false;
+                    MyTeamOnline = 0;
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -36,7 +37,20 @@ namespace GameServer
             try
             {
                 int dodaidaybyte = stream.EndRead(thongtin);
-                if (dodaidaybyte <= 0) Console.WriteLine("BLANK");
+                if (dodaidaybyte <= 0) {
+                    if (ThisPlayer != null)
+                    {
+                        using (PBL4Entities db = new PBL4Entities())
+                        {
+                            player targetAcc = db.players.Find(System.Convert.ToInt32(ThisPlayer.id));
+                            targetAcc.online = false;
+                            db.SaveChanges();
+                        }
+                    }
+                    ketnoiTCPdenSV.Dispose();
+                    ketnoiTCPdenSV = null;
+                    ThisPlayer = null;
+                    Console.WriteLine("Kết nối đã bị ngắt."); }
                 else
                 {
                     byte[] data = new byte[dodaidaybyte];
@@ -50,6 +64,10 @@ namespace GameServer
             catch (ObjectDisposedException)
             {
                 Console.WriteLine("TcpClient đã được Dispose");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine("Kết nối đã bị ngắt: " + ex.Message);
             }
             catch (Exception ex)
             {
@@ -134,7 +152,7 @@ namespace GameServer
                                     else
                                     {
                                         Server.DSClient[int.Parse(info[3])].GuiDenClient(Encoding.UTF8.GetBytes("ERROR|Sai mật khẩu"));
-                                    }    
+                                    }
                                 }
                                 else
                                 {
@@ -143,17 +161,21 @@ namespace GameServer
                             }
                             break;
                         case "LOGOUT":
-                            using (PBL4Entities db = new PBL4Entities())
-                            {
-                                player targetAcc = db.players.Find(System.Convert.ToInt32(info[1]));
-                                targetAcc.online = false;
-                                db.SaveChanges();
+                            if (info[1] != "-1")
+                            { 
+                                using (PBL4Entities db = new PBL4Entities())
+                                {
+                                    player targetAcc = db.players.Find(System.Convert.ToInt32(info[1]));
+                                    targetAcc.online = false;
+                                    db.SaveChanges();
+                                } 
                             }
                             byte[] data=(Encoding.UTF8.GetBytes("LOGOUT"));
                             IAsyncResult result = stream.BeginWrite(data, 0, data.Length, null, null);
                             stream.EndWrite(result);
-                            Server.DSClient[int.Parse(info[2])].ketnoiTCPdenSV.Dispose();
-                            Server.DSClient[int.Parse(info[2])].ketnoiTCPdenSV = null;
+                            ThisPlayer = null;
+                            ketnoiTCPdenSV.Dispose();
+                            ketnoiTCPdenSV = null;
                             break;
 
                         case "MATCHMAKING":
@@ -171,6 +193,57 @@ namespace GameServer
                                 db.SaveChanges();
                             }
                                 break;
+                        case "ALLSCORE":
+                            {
+                                using (PBL4Entities db = new PBL4Entities())
+                                {
+                                    var players = db.players
+                                        .OrderByDescending(p => p.score)
+                                        .ToList();
+
+                                    int rank = 1;
+                                    int lastScore = players[0].score;
+                                    StringBuilder output = new StringBuilder();
+                                    List<string> outputs = new List<string>();
+
+                                    foreach (var player in players)
+                                    {
+                                        if (player.score < lastScore)
+                                        {
+                                            rank++;
+                                            lastScore = player.score;
+                                        }
+
+                                        string playerString = $"{rank}|{player.username}|{player.score}|";
+
+                                        // Check if adding the next player would exceed the buffer size
+                                        if ((output.Length + playerString.Length) * sizeof(char) > BufferSize-20)
+                                        {
+                                            // Remove the last "|"
+                                            output.Remove(output.Length - 1, 1);
+                                            outputs.Add("ALLSCORE|" + output.ToString());
+                                            output.Clear();
+                                        }
+
+                                        output.Append(playerString);
+                                    }
+
+                                    // Add the remaining players
+                                    if (output.Length > 0)
+                                    {
+                                        // Remove the last "|"
+                                        output.Remove(output.Length - 1, 1);
+                                        outputs.Add("ALLSCORE|" + output.ToString());
+                                    }
+
+                                    foreach (var outStr in outputs)
+                                    {
+                                        Console.WriteLine(outStr);
+                                        GuiDenClient(Encoding.UTF8.GetBytes(outStr));
+                                    }
+                                }
+                                break;
+                            }
                     }
                 }
             }
