@@ -345,13 +345,13 @@ public class Game : MonoBehaviour
         {
             P1[i].GetComponent<QuanCo>().TenThatCoUp = allname[0];
             allname.RemoveAt(0);
-            P1[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDo");
+            if (P1[i].GetComponent<QuanCo>().TenQuanCo != "vua") P1[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDo");
         }
         for (int i = 0; i < P2.Count; i++)
         {
             P2[i].GetComponent<QuanCo>().TenThatCoUp = allname[0];
             allname.RemoveAt(0);
-            P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDen");
+            if (P2[i].GetComponent<QuanCo>().TenQuanCo != "vua") P2[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Game/Skin" + GlobalThings.SkinID + "/BlankDen");
         }
     }
 
