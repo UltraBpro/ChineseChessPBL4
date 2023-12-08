@@ -12,13 +12,11 @@ public class CursorController : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-        Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
     }
 
     private void Update()
@@ -34,17 +32,18 @@ public class CursorController : MonoBehaviour
                 Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
             }
         }
+        else
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        } 
+            
     }
 
     public void NoCursor()
     {
-        if (useCursor)
+        if (!useCursor)
         {
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        }
-        else
-        {
-            Cursor.SetCursor(mouse0, new Vector2(10, 0), CursorMode.Auto);
         }
         useCursor = !useCursor;
     }
