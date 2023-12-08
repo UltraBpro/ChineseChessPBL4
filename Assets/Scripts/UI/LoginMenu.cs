@@ -15,6 +15,7 @@ public class LoginMenu : MonoBehaviour
     public GameObject textboxPasswordLogin;
     public GameObject MessageLogin;
     public GameObject MessageRegister;
+    public GameObject AddressInput;
 
     public void openRegisterPanel()
     {
@@ -34,8 +35,9 @@ public class LoginMenu : MonoBehaviour
     {
         if (GameClient.instance.idDuocCap == -1)
         {
+            
             GameClient.instance.WaitingForServer = true;
-            GameClient.instance.ConnectDenSV("127.0.0.1", 1006);
+            GameClient.instance.ConnectDenSV(AddressInput.GetComponent<InputField>().text, 1006);
             float startTime = Time.realtimeSinceStartup;
             while (GameClient.instance.WaitingForServer)
             {

@@ -4860,6 +4860,7 @@ MonoBehaviour:
   BlackName: {fileID: 75632623}
   ChatPanel: {fileID: 267055465}
   AskPanel: {fileID: 6525870651669630059}
+  ButtonHoanCo: {fileID: 1105659226}
   TurnText: {fileID: 533063987}
   EndGamePanelPrefab: {fileID: 1242815754017695025, guid: a264fd22aed1e1144be8c884160d1c72, type: 3}
 --- !u!4 &1208290860

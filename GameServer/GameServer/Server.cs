@@ -17,6 +17,7 @@ namespace GameServer
 
         public static void Chay(string IPtoHost)
         {
+            ResetAccountsState();
             if (IPtoHost == "") IPtoHost = "127.0.0.1";
             for (int i = 0; i < MaxConnections; i++) DSClient.Add(i, new ClientInSV(i));
             ServerTcpListener = new TcpListener(IPAddress.Parse(IPtoHost), Port);
@@ -71,10 +72,16 @@ namespace GameServer
             DSClient[id2].GuiDenClient(data2);
         }
 
-        public static void GuiThongTinAccount(int idclienttarget, int idaccount)
+        public static void ResetAccountsState()
         {
-            //byte[] data2 = Encoding.UTF8.GetBytes("ACCOUNT|2|" + id1);
-            //DSClient[idclienttarget].GuiDenClient(data2);
+            using (PBL4Entities db = new PBL4Entities())
+            {
+                foreach(player acc in db.players)
+                {
+                    acc.online = false;
+                }
+                db.SaveChanges();
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ public class Game : MonoBehaviour
     public GameObject RedTimer, RedAvatar, RedName, BlackTimer, BlackAvatar, BlackName;
     public GameObject ChatPanel;
     public GameObject AskPanel;private int HoanCoChance = 0;
+    public GameObject ButtonHoanCo;
     public GameObject TurnText;
     public GameObject EndGamePanelPrefab;
     
@@ -39,8 +40,9 @@ public class Game : MonoBehaviour
         }
         foreach (GameObject i in P1) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
         foreach (GameObject i in P2) { allTitle[(int)i.transform.position.x, (int)i.transform.position.y] = i; i.GetComponent<QuanCo>().LoadSkin(); }
-        if (GlobalThings.GameRule == 1) LoadCoUp();
         LoadPanel();
+        if (GlobalThings.GameRule == 1&&myTeam!=2) LoadCoUp();
+        if (GlobalThings.GameRule == 1) ButtonHoanCo.SetActive(false);
     }
 
     private void Update()
