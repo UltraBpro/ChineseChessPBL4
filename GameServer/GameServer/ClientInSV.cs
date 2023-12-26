@@ -67,6 +67,18 @@ namespace GameServer
             }
             catch (IOException ex)
             {
+                if (ThisPlayer != null)
+                {
+                    using (PBL4Entities db = new PBL4Entities())
+                    {
+                        player targetAcc = db.players.Find(System.Convert.ToInt32(ThisPlayer.id));
+                        targetAcc.online = false;
+                        db.SaveChanges();
+                    }
+                }
+                ketnoiTCPdenSV.Dispose();
+                ketnoiTCPdenSV = null;
+                ThisPlayer = null;
                 Console.WriteLine("Kết nối đã bị ngắt: " + ex.Message);
             }
             catch (Exception ex)
