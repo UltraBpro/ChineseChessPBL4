@@ -56,7 +56,7 @@ namespace GameServer
                     byte[] data = new byte[dodaidaybyte];
                     Array.Copy(buffer, data, dodaidaybyte);
                     //Xử lý thông tin nhận được
-                    Console.WriteLine(Encoding.UTF8.GetString(data));
+                    Console.WriteLine("Received from client"+id+": "+Encoding.UTF8.GetString(data));
                     ReactToClient(Encoding.UTF8.GetString(data));
                     stream.BeginRead(buffer, 0, BufferSize, new AsyncCallback(NhanStream), null);
                 }
@@ -91,6 +91,7 @@ namespace GameServer
         {
             try
             {
+                Console.WriteLine("Send to client" + id + ": " + Encoding.UTF8.GetString(data));
                 // Bắt đầu hoạt động gửi không đồng bộ
                 stream.BeginWrite(data, 0, data.Length, new AsyncCallback(DaGuiXongRoi), stream);
             }
@@ -250,7 +251,6 @@ namespace GameServer
 
                                     foreach (var outStr in outputs)
                                     {
-                                        Console.WriteLine(outStr);
                                         GuiDenClient(Encoding.UTF8.GetBytes(outStr));
                                     }
                                 }

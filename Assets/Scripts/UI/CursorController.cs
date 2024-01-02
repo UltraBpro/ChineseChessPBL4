@@ -13,10 +13,8 @@ public class CursorController : MonoBehaviour
         {
             instance = this;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        else if (instance != this) Destroy(this);
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Update()

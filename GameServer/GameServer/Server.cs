@@ -23,7 +23,7 @@ namespace GameServer
             ServerTcpListener = new TcpListener(IPAddress.Parse(IPtoHost), Port);
             ServerTcpListener.Start();
             ServerTcpListener.BeginAcceptTcpClient(new AsyncCallback(NhanKetNoi), null);
-            Console.WriteLine("Tao SV o dia chi: "+IPtoHost+":"+Port);
+            Console.WriteLine("Tao SV o dia chi: "+IPtoHost+": "+Port);
         }
 
         private static void NhanKetNoi(IAsyncResult ketqua)
